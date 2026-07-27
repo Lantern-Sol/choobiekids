@@ -13,7 +13,7 @@
     "logo_height_mobile": 28,
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
-    "type_heading_font": "inter_n7",
+    "type_heading_font": "plus_jakarta_sans_n7",
     "type_accent_font": "inter_n7",
     "type_size_paragraph": "14",
     "type_line_height_paragraph": "body-loose",
@@ -50,7 +50,8 @@
     "badge_corner_radius": 100,
     "badge_text_transform": "none",
     "primary_button_border_width": 0,
-    "button_border_radius_primary": 14,
+    "primary_button_font_weight": "700",
+    "button_border_radius_primary": 50,
     "secondary_button_border_width": 1,
     "button_border_radius_secondary": 14,
     "cart_type": "drawer",
@@ -79,11 +80,11 @@
     "palette_input_border": "{{ settings.color_palette.color3 }}",
     "palette_variant_border": "{{ settings.color_palette.color3 }}",
     "color_palette": {
-      "background": "#ffffff",
-      "foreground": "#000000",
-      "color1": "#333333",
-      "color2": "#EEF1EA",
-      "color3": "#DFDFDF"
+      "background": "#fffffb",
+      "foreground": "#2c353f",
+      "color1": "#4a6b57",
+      "color2": "#faf7f0",
+      "color3": "#ffd82f"
     }
   },
   "presets": {

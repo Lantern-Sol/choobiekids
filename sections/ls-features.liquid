@@ -1,0 +1,115 @@
+{{ 'ls-homepage.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    {% if section.settings.background_color != blank %}
+      --color-background: {{ section.settings.background_color }};
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+    --padding-block-start: {{ section.settings.padding_top }}px;
+    --padding-block-end: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="ls-features section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
+  <div class="page-width">
+    <div class="ls-features__grid">
+      {% for block in section.blocks %}
+        <div class="ls-feature" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}
+            <div class="ls-feature__icon">
+              {{ block.settings.icon | image_url: width: 112 | image_tag:
+                loading: 'lazy',
+                widths: '56, 112',
+                sizes: '56px'
+              }}
+            </div>
+          {% endif %}
+
+          {% if block.settings.title != blank %}
+            <h4 class="ls-feature__title">{{ block.settings.title }}</h4>
+          {% endif %}
+
+          {% if block.settings.description != blank %}
+            <div class="ls-feature__description">{{ block.settings.description }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Features",
+  "tag": "section",
+  "class": "ls-features-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>A short description of this feature.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Features",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

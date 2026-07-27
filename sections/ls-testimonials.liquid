@@ -1,0 +1,162 @@
+{{ 'ls-homepage.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    {% if section.settings.background_color != blank %}
+      --color-background: {{ section.settings.background_color }};
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+    --padding-block-start: {{ section.settings.padding_top }}px;
+    --padding-block-end: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<div class="ls-testimonials section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="ls-testimonials__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% capture slides %}
+      {% for block in section.blocks %}
+        <slideshow-slide class="ls-testimonial-slide" {{ block.shopify_attributes }}>
+          <div class="ls-testimonial-card">
+            <div class="ls-testimonial-card__image">
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 680 | image_tag:
+                  loading: 'lazy',
+                  widths: '340, 500, 680',
+                  sizes: '(min-width: 750px) 340px, 100vw'
+                }}
+              {% else %}
+                {{ 'lifestyle-' | append: forloop.index | placeholder_svg_tag: 'ls-testimonial-card__placeholder' }}
+              {% endif %}
+            </div>
+
+            <div class="ls-testimonial-card__content">
+              <div class="ls-testimonial-card__content-top">
+                <svg class="ls-testimonial-card__quote-open" width="23" height="18" viewBox="0 0 22.72 18.304" fill="none" aria-hidden="true">
+                  <path d="M12.928 18.304V12.8C12.928 9.344 13.7387 6.528 15.36 4.352C17.024 2.13333 19.4773 0.682666 22.72 0V4.16C21.2693 4.50133 20.1173 5.14133 19.264 6.08C18.4107 6.976 17.856 8.064 17.6 9.344H21.44V18.304H12.928ZM0 18.304V12.8C0 9.344 0.810667 6.528 2.432 4.352C4.096 2.13333 6.528 0.682666 9.728 0V4.16C8.27733 4.50133 7.12533 5.14133 6.272 6.08C5.41867 6.976 4.864 8.064 4.608 9.344H8.448V18.304H0Z" fill="#FF6B5A"/>
+                </svg>
+
+                <div class="ls-testimonial-card__text">
+                  {{ block.settings.quote }}
+                </div>
+              </div>
+
+              <div class="ls-testimonial-card__content-bottom">
+                {% if block.settings.author != blank %}
+                  <p class="ls-testimonial-card__author">{{ block.settings.author }}</p>
+                {% endif %}
+
+                <svg class="ls-testimonial-card__quote-close" width="23" height="18" viewBox="0 0 22.72 18.304" fill="none" aria-hidden="true">
+                  <path d="M12.928 18.304V12.8C12.928 9.344 13.7387 6.528 15.36 4.352C17.024 2.13333 19.4773 0.682666 22.72 0V4.16C21.2693 4.50133 20.1173 5.14133 19.264 6.08C18.4107 6.976 17.856 8.064 17.6 9.344H21.44V18.304H12.928ZM0 18.304V12.8C0 9.344 0.810667 6.528 2.432 4.352C4.096 2.13333 6.528 0.682666 9.728 0V4.16C8.27733 4.50133 7.12533 5.14133 6.272 6.08C5.41867 6.976 4.864 8.064 4.608 9.344H8.448V18.304H0Z" fill="#FF6B5A"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </slideshow-slide>
+      {% endfor %}
+    {% endcapture %}
+
+    {% capture controls %}
+      {% render 'slideshow-controls',
+        style: 'dots',
+        item_count: section.blocks.size,
+        autoplay: false
+      %}
+    {% endcapture %}
+
+    {% render 'slideshow',
+      slides: slides,
+      controls: controls,
+      slide_count: section.blocks.size,
+      slides_to_show: 2,
+      mobile_slides_to_show: 1,
+      slides_to_scroll: 1,
+      infinite: true,
+      autoplay: false,
+      auto_hide_controls: true
+    %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "ls-testimonials-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What parents say"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote",
+          "default": "<p>This is an amazing testimonial from a happy customer.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Happy Parent"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}
