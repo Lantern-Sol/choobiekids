@@ -1069,6 +1069,7 @@
         "testimonial_1": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/testimonial-photo-1.webp",
             "quote": "<p>My kids love their Choobie shoes! They run, jump, and play all day without complaints.</p>",
             "author": "Maya R."
           }
@@ -1076,6 +1077,7 @@
         "testimonial_2": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/testimonial-photo-3.webp",
             "quote": "<p>Finally found shoes that let my child's feet develop naturally. The quality is outstanding.</p>",
             "author": "Dan & Priya"
           }
