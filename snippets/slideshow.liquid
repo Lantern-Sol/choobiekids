@@ -47,7 +47,7 @@
     ref="{{ ref }}"
   {% endif %}
   class="slideshow {{ class }}"
-  style="--slideshow-timeline: {% render 'timeline-scope', count: slide_count, prefix: 'slide' %}; --slides-per-view-desktop: {{ slides_to_show }}; --slides-per-view-mobile: {{ mobile_slides_to_show }}; {{ style }}"
+  style="--slideshow-timeline: {% render 'timeline-scope', count: slide_count, prefix: 'slide' %}; --slides-per-view-desktop: {{ slides_to_show }}; --slides-per-view-mobile: {{ mobile_slides_to_show }};{% if autoplay == true %} --autoplay-speed: {{ autoplay_speed }}s;{% endif %} {{ style }}"
   {% if autoplay == true %}
     autoplay="{{ autoplay_speed }}" aria-live="polite"
   {% endif %}

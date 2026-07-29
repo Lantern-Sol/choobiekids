@@ -11,17 +11,10 @@
    Hero slideshow overrides
    ---------------------------------------------------------- */
 
-/* Height: match Figma 1440×560 (35rem) */
+/* Height: match Figma — both the 1440×560 desktop and 390×560 mobile Hero Banner frames are 560px (35rem) tall */
 .slideshow-section slideshow-slides,
 .slideshow-section slideshow-slide {
-  min-height: 20rem;
-}
-
-@media screen and (min-width: 750px) {
-  .slideshow-section slideshow-slides,
-  .slideshow-section slideshow-slide {
-    min-height: 35rem;
-  }
+  min-height: 35rem;
 }
 
 /* Use the .section 3-column grid on slide content so it respects --page-margin */
@@ -36,11 +29,6 @@
 .slideshow-section .slide__content > * {
   grid-column: 2;
   margin: 0;
-}
-
-/* Diagonal gradient overlay (55.4deg per Figma) */
-.slideshow-section .overlay--solid {
-  background: linear-gradient(55.4deg, rgba(0, 0, 0, 0.3) 43.8%, transparent 55.2%);
 }
 
 /* Text container max-widths from Figma */
@@ -87,6 +75,7 @@
 }
 
 .slideshow-section .slideshow-controls__dots .slideshow-control {
+  position: relative;
   width: 2rem;
   height: 0.1875rem;
   padding: 0;
@@ -97,11 +86,43 @@
   line-height: 0;
   color: transparent;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  overflow: hidden;
 }
 
-.slideshow-section .slideshow-controls__dots .slideshow-control[aria-selected='true'] {
+/* Fill layer — grows left to right to show autoplay progress for the active slide */
+.slideshow-section .slideshow-controls__dots .slideshow-control::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0;
   background-color: #ffd82f;
+}
+
+.slideshow-section .slideshow-controls__dots .slideshow-control[aria-selected='true']::after {
+  width: 100%;
+}
+
+.slideshow-section slideshow-component[autoplay] .slideshow-controls__dots .slideshow-control[aria-selected='true']::after {
+  animation: slideshow-dot-fill var(--autoplay-speed, 4s) linear forwards;
+}
+
+.slideshow-section slideshow-component[autoplay][paused] .slideshow-controls__dots .slideshow-control[aria-selected='true']::after {
+  animation-play-state: paused;
+}
+
+@keyframes slideshow-dot-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideshow-section slideshow-component[autoplay] .slideshow-controls__dots .slideshow-control[aria-selected='true']::after {
+    animation: none;
+  }
 }
 
 /* Play/pause — hide both by default, show via autoplay state */

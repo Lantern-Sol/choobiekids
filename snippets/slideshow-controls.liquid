@@ -180,7 +180,6 @@
           <li>
             <button
               class="slideshow-control button button-unstyled"
-              style="animation-timeline: --slide-{{ forloop.index }}"
               aria-label="{{ 'accessibility.slide_status' | t: index: forloop.index, length: forloop.length }}"
               on:click="/select/{{ forloop.index0 }}"
               ref="dots[]"
