@@ -1105,18 +1105,10 @@
     "content_cards": {
       "type": "ls-content-cards",
       "blocks": {
-        "card_1": {
-          "type": "card",
-          "settings": {
-            "title": "Our story",
-            "description": "<p>Learn about why we started Choobie Kids.</p>",
-            "link_text": "Read more",
-            "link": ""
-          }
-        },
         "card_2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/content-card-photo-3.webp",
             "title": "The journal",
             "description": "<p>Tips, guides, and insights on barefoot shoes for kids.</p>",
             "link_text": "Read more",
@@ -1126,17 +1118,28 @@
         "card_3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/content-card-photo-4.webp",
             "title": "Why barefoot?",
             "description": "<p>The science behind natural foot development.</p>",
+            "link_text": "Read more",
+            "link": ""
+          }
+        },
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/content-card-photo-6.webp",
+            "title": "Our story",
+            "description": "<p>Learn about why we started Choobie Kids.</p>",
             "link_text": "Read more",
             "link": ""
           }
         }
       },
       "block_order": [
-        "card_1",
         "card_2",
-        "card_3"
+        "card_3",
+        "card_1"
       ],
       "settings": {
         "background_color": "",
