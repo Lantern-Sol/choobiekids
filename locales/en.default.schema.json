@@ -993,6 +993,8 @@
     "mobile_card_size": "Mobile card size",
     "mobile_columns": "Mobile columns",
     "mobile_height": "Mobile height",
+    "mobile_image_position_x": "Mobile image position (horizontal)",
+    "mobile_image_position_y": "Mobile image position (vertical)",
     "mobile_logo_image": "Mobile logo",
     "mobile_pagination": "Mobile pagination",
     "mobile_quick_add": "Mobile quick add",

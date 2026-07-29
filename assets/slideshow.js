@@ -15,6 +15,11 @@ import { SlideshowSelectEvent } from '@theme/events';
 // The threshold for determining visibility of slides.
 const SLIDE_VISIBLITY_THRESHOLD = 0.7;
 
+// Touch devices have no real pointer to leave, so `:hover` can get stuck on an
+// element after a tap. Only trust `:hover` as an autoplay-pause signal on devices
+// that actually support hovering.
+const supportsHover = matchMedia('(hover: hover)').matches;
+
 /**
  * Shared viewport observer manager for lazy scroll enablement.
  *
@@ -340,16 +345,35 @@ export class Slideshow extends Component {
    * Starts automatic slide playback.
    * @param {number} [interval] - The time interval in seconds between slides.
    */
-  play(interval = this.autoplayInterval) {
+  play(interval) {
     if (this.#interval) return;
 
+    // `on:click="/play"` invokes this with the click Event as its first argument,
+    // which would defeat a default parameter (those only apply to `undefined`).
+    if (typeof interval !== 'number') interval = this.#remainingTime ?? this.autoplayInterval;
+
+    this.#remainingTime = undefined;
     this.paused = false;
 
-    this.#interval = setInterval(() => {
-      if (this.matches(':hover') || document.hidden) return;
+    this.#scheduleTick(interval);
+  }
+
+  /**
+   * @param {number} delay
+   */
+  #scheduleTick(delay) {
+    this.#tickStartedAt = Date.now();
+    this.#tickDuration = delay;
+
+    this.#interval = setTimeout(() => {
+      if ((supportsHover && this.matches(':hover')) || document.hidden) {
+        this.#scheduleTick(delay);
+        return;
+      }
 
       this.next();
-    }, interval);
+      this.#scheduleTick(this.autoplayInterval);
+    }, delay);
   }
 
   /**
@@ -376,7 +400,12 @@ export class Slideshow extends Component {
    * Suspends automatic slide playback.
    */
   suspend() {
-    clearInterval(this.#interval);
+    if (this.#interval && this.#tickStartedAt != null && this.#tickDuration != null) {
+      const elapsed = Date.now() - this.#tickStartedAt;
+      this.#remainingTime = Math.max(0, this.#tickDuration - elapsed);
+    }
+
+    clearTimeout(this.#interval);
     this.#interval = undefined;
   }
 
@@ -509,10 +538,19 @@ export class Slideshow extends Component {
   #disabled = false;
 
   /**
-   * The interval ID for automatic playback.
+   * The timer ID for automatic playback.
    * @type {number|undefined}
    */
   #interval = undefined;
+
+  /** @type {number|undefined} */
+  #tickStartedAt = undefined;
+
+  /** @type {number|undefined} */
+  #tickDuration = undefined;
+
+  /** @type {number|undefined} */
+  #remainingTime = undefined;
 
   /**
    * The Scroller instance that manages scrolling.

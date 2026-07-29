@@ -27,9 +27,16 @@
     {%- render 'meta-tags' -%}
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap">
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+
+    {% if template == 'index' %}
+      {{ 'ls-homepage.css' | asset_url | stylesheet_tag }}
+    {% endif %}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
