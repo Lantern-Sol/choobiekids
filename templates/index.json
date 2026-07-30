@@ -1143,11 +1143,11 @@
         "card_1"
       ],
       "settings": {
-        "background_color": "",
+        "background_color": "{{ settings.color_palette.color1 }}",
         "heading_color": "#fffffb",
         "text_color": "#fffffb",
         "link_color": "#fffffb",
-        "image_border_radius": 12,
+        "image_border_radius": 0,
         "padding_top": 48,
         "padding_bottom": 48
       }
