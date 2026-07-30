@@ -1085,7 +1085,7 @@
         "testimonial_3": {
           "type": "testimonial",
           "settings": {
-            "image": "shopify://shop_images/content-card-photo-6.webp",
+            "image": "shopify://shop_images/product-card-photo-1.webp",
             "quote": "<p>These are the only shoes my daughter wants to wear. Comfortable and durable!</p>",
             "author": "Tom H."
           }
