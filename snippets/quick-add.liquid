@@ -11,7 +11,7 @@
 
 {% liquid
   assign product_form_id = 'QuickAdd-ProductForm-' | append: product.id | append: '-' | append: block.id
-  assign add_to_cart_text = 'actions.add' | t
+  assign add_to_cart_text = 'actions.add_to_cart' | t
   assign choose_options_text = 'actions.choose' | t
 
   if inherit_color_scheme

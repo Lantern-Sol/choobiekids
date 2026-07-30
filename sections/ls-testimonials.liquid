@@ -11,15 +11,15 @@
   }
 {%- endstyle -%}
 
-<div class="ls-testimonials section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
-  <div class="page-width">
-    {% if section.settings.heading != blank %}
-      <h2 class="ls-testimonials__heading">{{ section.settings.heading }}</h2>
-    {% endif %}
+<div class="ls-testimonials section section--page-width" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
+  {% if section.settings.heading != blank %}
+    <h2 class="ls-testimonials__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
 
+  <div class="ls-testimonials__slider">
     {% capture slides %}
       {% for block in section.blocks %}
-        <slideshow-slide class="ls-testimonial-slide" {{ block.shopify_attributes }}>
+        {% capture card %}
           <div class="ls-testimonial-card">
             <div class="ls-testimonial-card__image">
               {% if block.settings.image != blank %}
@@ -55,7 +55,15 @@
               </div>
             </div>
           </div>
-        </slideshow-slide>
+        {% endcapture %}
+
+        {% render 'slideshow-slide',
+          index: forloop.index0,
+          slide_id: block.id,
+          class: 'ls-testimonial-slide',
+          attributes: block.shopify_attributes,
+          children: card
+        %}
       {% endfor %}
     {% endcapture %}
 

@@ -4740,6 +4740,15 @@ slideshow-arrows .slideshow-control.slideshow-control--style-none {
   }
 }
 
+/* Touch devices have no real hover state, so the arrows above would stay
+   invisible forever. Show them by default there instead of waiting for a
+   hover/focus that will never come. */
+@media (hover: none) {
+  .card-gallery slideshow-arrows .slideshow-control {
+    opacity: 1;
+  }
+}
+
 .section-resource-list,
 .section-carousel {
   row-gap: var(--gap);

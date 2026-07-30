@@ -6,6 +6,16 @@
       --color-background: {{ section.settings.background_color }};
       background-color: {{ section.settings.background_color }};
     {% endif %}
+    {% if section.settings.heading_color != blank %}
+      --content-cards-heading-color: {{ section.settings.heading_color }};
+    {% endif %}
+    {% if section.settings.text_color != blank %}
+      --content-cards-text-color: {{ section.settings.text_color }};
+    {% endif %}
+    {% if section.settings.link_color != blank %}
+      --content-cards-link-color: {{ section.settings.link_color }};
+    {% endif %}
+    --content-cards-image-radius: {{ section.settings.image_border_radius }}px;
     --padding-block-start: {{ section.settings.padding_top }}px;
     --padding-block-end: {{ section.settings.padding_bottom }}px;
   }
@@ -57,7 +67,36 @@
     {
       "type": "color",
       "id": "background_color",
-      "label": "Background color"
+      "label": "Background color",
+      "default": "#4a6b57"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#fffffb"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body text color",
+      "default": "#fffffb"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#fffffb"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
     },
     {
       "type": "range",

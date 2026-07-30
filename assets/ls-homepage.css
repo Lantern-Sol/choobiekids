@@ -207,11 +207,23 @@
   --slideshow-gap: 2.5rem;
 }
 
-/* Gap-aware slide width (desktop: 2 cards visible) */
+/* content-visibility:auto collapses slides to 0 height until JS reveals them, which never happens here */
+.ls-testimonials-section slideshow-slide {
+  content-visibility: visible;
+}
+
+
 @media screen and (min-width: 750px) {
+  /* Left edge stays at the normal content column; right edge bleeds to the true screen edge */
+  .ls-testimonials-section .ls-testimonials__slider {
+    grid-column: 2 / 4;
+  }
+
+  /* Fixed card width from Figma (340px image + 24px gap + 287px content) instead of an
+     even container split, so a third card has room to peek past the visible edge */
   .ls-testimonials-section slideshow-slide {
-    width: calc((100% - (var(--slideshow-gap, 0px) * (var(--slides-per-view-desktop, 1) - 1))) / var(--slides-per-view-desktop, 1));
-    flex: 0 0 calc((100% - (var(--slideshow-gap, 0px) * (var(--slides-per-view-desktop, 1) - 1))) / var(--slides-per-view-desktop, 1));
+    width: 40.6875rem;
+    flex: 0 0 40.6875rem;
   }
 }
 
@@ -314,8 +326,17 @@
 }
 
 /* Nav dots — line style */
+.ls-testimonials-section .slideshow-controls__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
 .ls-testimonials-section .slideshow-controls__dots .slideshow-control {
-  width: 2.5rem;
+  width: 2rem;
   height: 0.1875rem;
   padding: 0;
   border: 0;
@@ -364,7 +385,7 @@
 
 .ls-content-card__image {
   aspect-ratio: 1 / 1;
-  border-radius: 0.75rem;
+  border-radius: var(--content-cards-image-radius, 0.75rem);
   overflow: hidden;
 }
 
@@ -375,25 +396,27 @@
 }
 
 .ls-content-card__title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
+  line-height: 1.2;
   margin: 0;
+  color: var(--content-cards-heading-color, inherit);
 }
 
 .ls-content-card__description {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  opacity: 0.8;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--content-cards-text-color, inherit);
 }
 
 .ls-content-card__link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 600;
-  font-size: 0.875rem;
+  font-weight: 700;
+  font-size: 1rem;
   text-decoration: none;
-  color: var(--color-foreground);
+  color: var(--content-cards-link-color, var(--color-foreground));
   transition: opacity 0.2s ease;
 }
 
