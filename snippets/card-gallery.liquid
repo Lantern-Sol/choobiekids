@@ -207,15 +207,6 @@
 </div>
 
 {% stylesheet %}
-  /* Desktop uses hover-to-swap (see product-card.js previewImage/resetImage),
-     mobile has no hover so it gets tappable arrows instead. Hide the arrows
-     on desktop so hover stays the only navigation there. */
-  @media screen and (min-width: 750px) {
-    .card-gallery slideshow-arrows {
-      display: none;
-    }
-  }
-
   .card-gallery {
     overflow: hidden;
     container-type: inline-size; /* Make card-gallery a container */

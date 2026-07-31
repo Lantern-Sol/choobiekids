@@ -14,8 +14,14 @@
 <div class="ls-editorial section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
   <div class="page-width" style="position: relative;">
     {% if section.settings.show_floating_icon %}
-      <div class="ls-floating-choobie ls-editorial__floating-icon{% if section.settings.image_position == 'left' %} ls-editorial__floating-icon--image-left{% endif %}{% if section.settings.icon_bottom %} ls-editorial__floating-icon--bottom{% endif %}"
-        {% if section.settings.icon_flip or section.settings.icon_rotation != 0 %}style="transform:{% if section.settings.icon_flip %} scaleX(-1){% endif %}{% if section.settings.icon_rotation != 0 %} rotate({{ section.settings.icon_rotation }}deg){% endif %}"{% endif %}>
+      {%- liquid
+        assign icon_tag = 'div'
+        if section.settings.enable_icon_parallax
+          assign icon_tag = 'ls-floating-icon-parallax'
+        endif
+      -%}
+      <{{ icon_tag }} class="ls-floating-choobie ls-editorial__floating-icon"
+        style="--icon-width: {{ section.settings.icon_width }}px; --icon-width-mobile: {{ section.settings.icon_width_mobile }}px; --icon-x: {{ section.settings.icon_x }}%; --icon-y: {{ section.settings.icon_y }}%; --icon-x-mobile: {{ section.settings.icon_x_mobile }}%; --icon-y-mobile: {{ section.settings.icon_y_mobile }}%; --icon-rotation: {{ section.settings.icon_rotation }}deg; --icon-rotation-mobile: {{ section.settings.icon_rotation_mobile }}deg;">
         <img
           src="{{ 'choobies-icon-2.svg' | asset_url }}"
           alt=""
@@ -24,7 +30,7 @@
           loading="lazy"
           class="ls-floating-choobie__img"
         >
-      </div>
+      </{{ icon_tag }}>
     {% endif %}
 
     <div class="ls-editorial__grid {% if section.settings.image_position == 'left' %}ls-editorial__grid--image-left{% endif %}">
@@ -78,6 +84,11 @@
     </div>
   </div>
 </div>
+
+{% if section.settings.show_floating_icon %}
+  {% comment %} Loaded unconditionally so toggling parallax on via the theme editor's AJAX section swap still works {% endcomment %}
+  <script src="{{ 'ls-floating-icon-parallax.js' | asset_url }}" defer="defer"></script>
+{% endif %}
 
 {% schema %}
 {
@@ -142,29 +153,94 @@
       "info": "Decorative floating mascot icon"
     },
     {
-      "type": "checkbox",
-      "id": "icon_flip",
-      "label": "Flip icon horizontally",
-      "default": false,
-      "info": "Mirror the icon left-to-right"
-    },
-    {
-      "type": "checkbox",
-      "id": "icon_bottom",
-      "label": "Icon at bottom",
-      "default": false,
-      "info": "Place icon near the bottom of the section instead of the top"
-    },
-    {
       "type": "range",
       "id": "icon_rotation",
-      "label": "Icon rotation",
+      "label": "Icon rotation (desktop)",
       "min": -180,
       "max": 180,
       "step": 5,
       "default": 0,
       "unit": "deg",
-      "info": "Rotate the floating Choobies icon"
+      "info": "The icon is symmetric, so rotation alone covers any orientation — no separate flip control needed"
+    },
+    {
+      "type": "range",
+      "id": "icon_rotation_mobile",
+      "label": "Icon rotation (mobile)",
+      "min": -180,
+      "max": 180,
+      "step": 5,
+      "default": 0,
+      "unit": "deg"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon size (desktop)",
+      "min": 100,
+      "max": 260,
+      "step": 10,
+      "default": 190,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "icon_width_mobile",
+      "label": "Icon size (mobile)",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "default": 120,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "icon_x",
+      "label": "Icon horizontal position (desktop)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "%",
+      "info": "Center of the icon, as a % of the section width"
+    },
+    {
+      "type": "range",
+      "id": "icon_y",
+      "label": "Icon vertical position (desktop)",
+      "min": -30,
+      "max": 130,
+      "step": 2,
+      "default": 0,
+      "unit": "%",
+      "info": "Center of the icon, as a % of the section height. Below 0% or above 100% pokes above/below the section"
+    },
+    {
+      "type": "range",
+      "id": "icon_x_mobile",
+      "label": "Icon horizontal position (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "icon_y_mobile",
+      "label": "Icon vertical position (mobile)",
+      "min": -30,
+      "max": 130,
+      "step": 2,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_icon_parallax",
+      "label": "Enable parallax effect on icon",
+      "default": false,
+      "info": "The icon drifts gently as visitors scroll past this section"
     },
     {
       "type": "color",

@@ -1017,9 +1017,15 @@
         "spec_text_2": "",
         "image_position": "right",
         "show_floating_icon": true,
-        "icon_flip": false,
-        "icon_bottom": false,
         "icon_rotation": 0,
+        "icon_rotation_mobile": 0,
+        "icon_width": 180,
+        "icon_width_mobile": 120,
+        "icon_x": 40,
+        "icon_y": -8,
+        "icon_x_mobile": 90,
+        "icon_y_mobile": -6,
+        "enable_icon_parallax": false,
         "background_color": "",
         "padding_top": 48,
         "padding_bottom": 48
@@ -1036,9 +1042,15 @@
         "spec_text_2": "",
         "image_position": "left",
         "show_floating_icon": true,
-        "icon_flip": true,
-        "icon_bottom": true,
         "icon_rotation": 0,
+        "icon_rotation_mobile": 0,
+        "icon_width": 210,
+        "icon_width_mobile": 120,
+        "icon_x": 88,
+        "icon_y": 78,
+        "icon_x_mobile": 16,
+        "icon_y_mobile": 96,
+        "enable_icon_parallax": false,
         "background_color": "",
         "padding_top": 48,
         "padding_bottom": 48
@@ -1055,9 +1067,15 @@
         "spec_text_2": "<p><strong>Barefoot or Shod? Footwear & Children's Gait</strong><br>Applied Sciences (MDPI) - <a href=\"https://www.mdpi.com/2076-3417/16/1/286\" target=\"_blank\">Systematic Review, 2026↗</a></p>",
         "image_position": "right",
         "show_floating_icon": true,
-        "icon_flip": false,
-        "icon_bottom": true,
         "icon_rotation": 0,
+        "icon_rotation_mobile": 0,
+        "icon_width": 240,
+        "icon_width_mobile": 180,
+        "icon_x": 16,
+        "icon_y": 78,
+        "icon_x_mobile": 90,
+        "icon_y_mobile": 96,
+        "enable_icon_parallax": false,
         "background_color": "",
         "padding_top": 48,
         "padding_bottom": 48
@@ -1224,29 +1242,29 @@
         "feature_1": {
           "type": "feature",
           "settings": {
-            "title": "Wide toe box",
-            "description": "<p>Room for natural toe spread and healthy foot development.</p>"
+            "title": "Easy on, all-day play",
+            "description": "<p>Wide opening, one pull tab. They do it themselves.</p>"
           }
         },
         "feature_2": {
           "type": "feature",
           "settings": {
-            "title": "Flexible sole",
-            "description": "<p>5.5mm thin sole for ground feel and natural movement.</p>"
+            "title": "Built the way feet grow",
+            "description": "<p>Wide toe box, zero drop, a 5.5 mm flexible sole.</p>"
           }
         },
         "feature_3": {
           "type": "feature",
           "settings": {
-            "title": "Zero drop",
-            "description": "<p>Flat from heel to toe for proper posture and balance.</p>"
+            "title": "Findable when it wanders",
+            "description": "<p>Built-in AirTag pocket. Find the shoe.</p>"
           }
         },
         "feature_4": {
           "type": "feature",
           "settings": {
-            "title": "Lightweight",
-            "description": "<p>So light, kids barely notice they're wearing shoes.</p>"
+            "title": "Sized in millimetres",
+            "description": "<p>No sizing guesswork. Measure, add, done.</p>"
           }
         }
       },
@@ -1257,7 +1275,7 @@
         "feature_4"
       ],
       "settings": {
-        "background_color": "",
+        "background_color": "#faf7f0",
         "padding_top": 48,
         "padding_bottom": 48
       }
@@ -1268,29 +1286,43 @@
         "q_1": {
           "type": "question",
           "settings": {
-            "question": "What are barefoot shoes?",
-            "answer": "<p>Barefoot shoes mimic the feeling of walking barefoot while protecting your child's feet. They feature a wide toe box, zero drop heel, thin flexible sole, and no arch support.</p>"
+            "question": "Are barefoot shoes good for toddlers learning to walk?",
+            "answer": "<p>Yes. New walkers rely on feeling the ground to learn balance, which is why pediatric guidance favours bare feet for first steps. Barefoot shoes keep that ground feel while protecting feet outdoors.</p>"
           }
         },
         "q_2": {
           "type": "question",
           "settings": {
-            "question": "What age are Choobie shoes for?",
-            "answer": "<p>Our shoes are designed for active kids. Check our size guide for specific age and foot measurements.</p>"
+            "question": "Do barefoot shoes cause flat feet?",
+            "answer": "<p>No — it's usually the opposite. A wide toe box and zero-drop sole let the arch develop and strengthen naturally, instead of being propped up by rigid support.</p>"
           }
         },
         "q_3": {
           "type": "question",
           "settings": {
-            "question": "How do I find the right size?",
-            "answer": "<p>We recommend measuring your child's feet and using our detailed size guide. When in doubt, size up for growing room.</p>"
+            "question": "What age is it okay to put an AirTag in my kid's shoe?",
+            "answer": "<p>There's no strict minimum age. Most parents add one once their child starts walking to school or daycare alone, but you can use the AirTag pocket as soon as it gives you peace of mind.</p>"
           }
         },
         "q_4": {
           "type": "question",
           "settings": {
-            "question": "Are barefoot shoes safe for kids?",
-            "answer": "<p>Research shows that barefoot shoes support natural foot development in children. They allow feet to move, flex, and strengthen as nature intended.</p>"
+            "question": "How much room should kids' shoes have?",
+            "answer": "<p>Leave about a thumb's width (roughly half an inch) between the longest toe and the front of the shoe. That gives room to grow without being so loose it affects balance.</p>"
+          }
+        },
+        "q_5": {
+          "type": "question",
+          "settings": {
+            "question": "How often should I measure my kid's feet?",
+            "answer": "<p>Kids' feet can grow up to two sizes a year. Measure every 2-3 months for toddlers and every 4-6 months for older kids to stay ahead of growth spurts.</p>"
+          }
+        },
+        "q_6": {
+          "type": "question",
+          "settings": {
+            "question": "What makes a shoe truly “barefoot”?",
+            "answer": "<p>A wide toe box, zero drop, a flexible sole that bends with the foot, and no added arch support — letting feet move and develop the way they would unshod.</p>"
           }
         }
       },
@@ -1298,15 +1330,18 @@
         "q_1",
         "q_2",
         "q_3",
-        "q_4"
+        "q_4",
+        "q_5",
+        "q_6"
       ],
       "settings": {
-        "eyebrow": "FAQ",
-        "heading": "Frequently asked questions",
-        "description": "<p>Find answers to common questions about our barefoot shoes.</p>",
+        "eyebrow": "Questions",
+        "heading": "The things parents actually ask.",
+        "heading_accent": "actually ask.",
+        "contact_text": "<p>Still stuck? Go to our contact us page and talk to us!</p>",
         "background_color": "",
-        "padding_top": 48,
-        "padding_bottom": 48
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "newsletter": {

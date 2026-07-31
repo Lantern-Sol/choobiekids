@@ -444,7 +444,7 @@
 .ls-features__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 2.5rem;
   text-align: center;
 }
 
@@ -468,18 +468,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .ls-feature__icon {
-  width: 3.5rem;
-  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size, 3.5rem);
+  height: var(--icon-size, 3.5rem);
+  padding: var(--icon-padding, 1rem);
+  background-color: var(--icon-bg, #4a6b57);
+  border-radius: var(--icon-radius, 0.75rem);
+  overflow: hidden;
 }
 
 .ls-feature__icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.ls-feature__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .ls-feature__title {
@@ -498,10 +512,6 @@
 /* ----------------------------------------------------------
    FAQ
    ---------------------------------------------------------- */
-.ls-faq {
-  padding-block: 3rem;
-}
-
 .ls-faq__wrapper {
   display: grid;
   grid-template-columns: 1fr;
@@ -509,10 +519,6 @@
 }
 
 @media screen and (min-width: 750px) {
-  .ls-faq {
-    padding-block: 4rem;
-  }
-
   .ls-faq__wrapper {
     grid-template-columns: 2fr 3fr;
     gap: 3rem;
@@ -524,24 +530,28 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-width: 0;
 }
 
 .ls-faq__eyebrow {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0.6;
+  font-family: var(--faq-eyebrow-font-family);
+  font-size: var(--faq-eyebrow-font-size);
+  color: var(--faq-eyebrow-color);
+  margin: 0;
 }
 
 .ls-faq__heading {
   margin: 0;
 }
 
-.ls-faq__description {
-  font-size: 0.875rem;
+.ls-faq__heading-highlight {
+  display: block;
+  color: var(--faq-accent-color);
+}
+
+.ls-faq__contact {
+  font-size: 1rem;
   line-height: 1.6;
-  opacity: 0.8;
 }
 
 .ls-faq__items {
@@ -550,16 +560,17 @@
 }
 
 .ls-faq__item {
-  border-bottom: 0.0625rem solid var(--color-foreground-opacity-10, rgba(0, 0, 0, 0.1));
+  border-bottom: 0.0625rem solid #edf0ee;
 }
 
 .ls-faq__item summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding-block: 1.25rem;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1rem;
   list-style: none;
 }
@@ -573,15 +584,17 @@
   content: '';
 }
 
-.ls-faq__item summary svg {
-  width: 1.25rem;
-  height: 1.25rem;
+.ls-faq__icon {
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
+  color: var(--faq-accent-color);
+  transform: rotate(90deg);
   transition: transform 0.3s ease;
 }
 
-.ls-faq__item[open] summary svg {
-  transform: rotate(90deg);
+.ls-faq__item[open] .ls-faq__icon {
+  transform: rotate(-90deg);
 }
 
 .ls-faq__answer {
@@ -796,11 +809,18 @@
   object-fit: contain;
 }
 
+.ls-editorial .page-width {
+  overflow-x: clip;
+}
+
 .ls-editorial__floating-icon {
-  width: 145px;
-  height: 123px;
-  top: -2.5rem;
-  left: calc(41.67% - 72px);
+  /* Ramps down between the mobile and desktop breakpoints so tablet
+     widths don't get the full desktop size in a much narrower column. */
+  --icon-width-fluid: clamp(calc(var(--icon-width, 190px) * 0.6), 13vw, var(--icon-width, 190px));
+  width: var(--icon-width-fluid);
+  height: auto;
+  left: calc(var(--icon-x, 50%) - (var(--icon-width-fluid) / 2));
+  top: calc(var(--icon-y, 50%) - (var(--icon-width-fluid) * 123 / 145 / 2));
 }
 
 .ls-editorial__floating-icon .ls-floating-choobie__img {
@@ -809,16 +829,12 @@
   object-fit: contain;
 }
 
-.ls-editorial__floating-icon--image-left {
-  left: calc(80.33% - 72px);
-}
-
-.ls-editorial__floating-icon--bottom {
-  top: 31.5rem;
-}
-
-.ls-editorial__floating-icon--bottom:not(.ls-editorial__floating-icon--image-left) {
-  left: calc(19.67% - 72px);
+@media screen and (max-width: 749px) {
+  .ls-editorial__floating-icon {
+    width: var(--icon-width-mobile, 120px);
+    left: calc(var(--icon-x-mobile, 50%) - (var(--icon-width-mobile, 120px) / 2));
+    top: calc(var(--icon-y-mobile, 50%) - (var(--icon-width-mobile, 120px) * 123 / 145 / 2));
+  }
 }
 
 /* ----------------------------------------------------------
@@ -828,10 +844,12 @@
   position: absolute;
   pointer-events: none;
   z-index: 2;
+  transform: rotate(var(--icon-rotation, 0deg));
+  transition: translate 0.1s linear;
 }
 
 @media screen and (max-width: 749px) {
   .ls-floating-choobie {
-    display: none;
+    transform: rotate(var(--icon-rotation-mobile, 0deg));
   }
 }

@@ -17,7 +17,15 @@
       {% for block in section.blocks %}
         <div class="ls-feature" {{ block.shopify_attributes }}>
           {% if block.settings.icon != blank %}
-            <div class="ls-feature__icon">
+            <div
+              class="ls-feature__icon"
+              style="
+                --icon-bg: {{ block.settings.icon_background_color }};
+                --icon-size: {{ block.settings.icon_size | divided_by: 16.0 }}rem;
+                --icon-padding: {{ block.settings.icon_padding | divided_by: 16.0 }}rem;
+                --icon-radius: {{ block.settings.icon_border_radius | divided_by: 16.0 }}rem;
+              "
+            >
               {{ block.settings.icon | image_url: width: 112 | image_tag:
                 loading: 'lazy',
                 widths: '56, 112',
@@ -26,12 +34,16 @@
             </div>
           {% endif %}
 
-          {% if block.settings.title != blank %}
-            <h4 class="ls-feature__title">{{ block.settings.title }}</h4>
-          {% endif %}
+          {% if block.settings.title != blank or block.settings.description != blank %}
+            <div class="ls-feature__content">
+              {% if block.settings.title != blank %}
+                <h4 class="ls-feature__title">{{ block.settings.title }}</h4>
+              {% endif %}
 
-          {% if block.settings.description != blank %}
-            <div class="ls-feature__description">{{ block.settings.description }}</div>
+              {% if block.settings.description != blank %}
+                <div class="ls-feature__description">{{ block.settings.description }}</div>
+              {% endif %}
+            </div>
           {% endif %}
         </div>
       {% endfor %}
@@ -48,7 +60,8 @@
     {
       "type": "color",
       "id": "background_color",
-      "label": "Background color"
+      "label": "Background color",
+      "default": "#faf7f0"
     },
     {
       "type": "range",
@@ -80,6 +93,46 @@
           "type": "image_picker",
           "id": "icon",
           "label": "Icon"
+        },
+        {
+          "type": "header",
+          "content": "Icon background"
+        },
+        {
+          "type": "color",
+          "id": "icon_background_color",
+          "label": "Background color",
+          "default": "#4a6b57"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Background size",
+          "min": 32,
+          "max": 96,
+          "step": 4,
+          "default": 56,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "icon_padding",
+          "label": "Icon padding",
+          "min": 0,
+          "max": 32,
+          "step": 2,
+          "default": 16,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "icon_border_radius",
+          "label": "Corner radius",
+          "min": 0,
+          "max": 48,
+          "step": 2,
+          "default": 12,
+          "unit": "px"
         },
         {
           "type": "text",
