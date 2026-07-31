@@ -621,7 +621,7 @@
         "use_mobile_gap": false,
         "mobile_gap": 12,
         "section_width": "full-width",
-        "section_height": "",
+        "section_height": "small",
         "section_height_custom": 50,
         "background_media": "none",
         "background_color": "",
@@ -1242,6 +1242,10 @@
         "feature_1": {
           "type": "feature",
           "settings": {
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
             "title": "Easy on, all-day play",
             "description": "<p>Wide opening, one pull tab. They do it themselves.</p>"
           }
@@ -1249,6 +1253,10 @@
         "feature_2": {
           "type": "feature",
           "settings": {
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
             "title": "Built the way feet grow",
             "description": "<p>Wide toe box, zero drop, a 5.5 mm flexible sole.</p>"
           }
@@ -1256,6 +1264,10 @@
         "feature_3": {
           "type": "feature",
           "settings": {
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
             "title": "Findable when it wanders",
             "description": "<p>Built-in AirTag pocket. Find the shoe.</p>"
           }
@@ -1263,6 +1275,10 @@
         "feature_4": {
           "type": "feature",
           "settings": {
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
             "title": "Sized in millimetres",
             "description": "<p>No sizing guesswork. Measure, add, done.</p>"
           }
@@ -1336,8 +1352,12 @@
       ],
       "settings": {
         "eyebrow": "Questions",
+        "eyebrow_font": "caveat_n4",
+        "eyebrow_font_size": 22,
+        "eyebrow_color": "#4a6b57",
         "heading": "The things parents actually ask.",
         "heading_accent": "actually ask.",
+        "accent_color": "#4a6b57",
         "contact_text": "<p>Still stuck? Go to our contact us page and talk to us!</p>",
         "background_color": "",
         "padding_top": 40,
