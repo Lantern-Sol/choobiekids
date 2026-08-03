@@ -584,6 +584,7 @@
           "name": "t:names.video",
           "settings": {
             "source": "uploaded",
+            "video": "shopify://files/videos/4853022_Family_Feet_3840x2160.mp4",
             "video_url": "",
             "video_autoplay": false,
             "video_loop": true,
