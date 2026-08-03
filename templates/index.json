@@ -1149,10 +1149,10 @@
           "type": "card",
           "settings": {
             "image": "shopify://shop_images/content-card-photo-6.webp",
-            "title": "Our story",
-            "description": "<p>Learn about why we started Choobie Kids.</p>",
-            "link_text": "Read more",
-            "link": ""
+            "title": "Our Story",
+            "description": "<p>It started one shoe short on a Colorado trail. So we built the findable one.</p>",
+            "link_text": "View More",
+            "link": "shopify://pages/our-story"
           }
         }
       },
