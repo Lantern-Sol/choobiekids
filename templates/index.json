@@ -1129,20 +1129,20 @@
           "type": "card",
           "settings": {
             "image": "shopify://shop_images/content-card-photo-3.webp",
-            "title": "The journal",
-            "description": "<p>Tips, guides, and insights on barefoot shoes for kids.</p>",
-            "link_text": "Read more",
-            "link": ""
+            "title": "The Journal",
+            "description": "<p>Measuring feet, sizing up, and the eternal case of the missing shoe.</p>",
+            "link_text": "Visit Our Blog",
+            "link": "shopify://blogs/choobies-journal"
           }
         },
         "card_3": {
           "type": "card",
           "settings": {
             "image": "shopify://shop_images/content-card-photo-4.webp",
-            "title": "Why barefoot?",
-            "description": "<p>The science behind natural foot development.</p>",
-            "link_text": "Read more",
-            "link": ""
+            "title": "Why Barefoot",
+            "description": "<p>Four things make a shoe truly barefoot and the research behind each one.</p>",
+            "link_text": "Learn More",
+            "link": "shopify://pages/why-barefoot"
           }
         },
         "card_1": {
