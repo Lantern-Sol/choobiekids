@@ -1449,7 +1449,7 @@
       "settings": {
         "heading": "Be the first to know the latest drops!",
         "heading_accent": "the latest drops!",
-        "subheading": "<p>Subscribe today and get 10% OFF your first order + updates and offers.</p>",
+        "subheading": "<p>Subscribe today and get <strong>10% OFF</strong> your first order + updates and offers.</p>",
         "placeholder": "Email Address",
         "button_text": "Subscribe",
         "success_message": "Thanks for subscribing!",
