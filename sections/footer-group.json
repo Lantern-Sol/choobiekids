@@ -159,7 +159,7 @@
         "menu_footer": {
           "type": "menu",
           "settings": {
-            "menu": "footer",
+            "menu": "shop",
             "heading": "",
             "menu_spacing": 12,
             "show_as_accordion": false,
@@ -167,7 +167,7 @@
             "accordion_dividers": false,
             "background_color": "",
             "text_color": "",
-            "heading_preset": "paragraph",
+            "heading_preset": "custom",
             "heading_font": "var(--font-heading--family)",
             "heading_enable_custom_font_weight": false,
             "heading_weight": "600",
@@ -188,7 +188,7 @@
         "menu_4EkYfG": {
           "type": "menu",
           "settings": {
-            "menu": "footer",
+            "menu": "institutional",
             "heading": "",
             "menu_spacing": 12,
             "show_as_accordion": false,
@@ -196,7 +196,7 @@
             "accordion_dividers": false,
             "background_color": "",
             "text_color": "",
-            "heading_preset": "paragraph",
+            "heading_preset": "custom",
             "heading_font": "var(--font-heading--family)",
             "heading_enable_custom_font_weight": false,
             "heading_weight": "600",
@@ -217,7 +217,7 @@
         "menu_main": {
           "type": "menu",
           "settings": {
-            "menu": "main-menu",
+            "menu": "support",
             "heading": "",
             "menu_spacing": 12,
             "show_as_accordion": false,
@@ -225,7 +225,7 @@
             "accordion_dividers": false,
             "background_color": "",
             "text_color": "",
-            "heading_preset": "paragraph",
+            "heading_preset": "custom",
             "heading_font": "var(--font-heading--family)",
             "heading_enable_custom_font_weight": false,
             "heading_weight": "600",
