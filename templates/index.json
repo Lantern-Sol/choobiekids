@@ -1395,14 +1395,14 @@
     "newsletter": {
       "type": "ls-newsletter",
       "settings": {
-        "heading": "Stay in the loop",
-        "subheading": "Sign up for updates on new releases and exclusive offers.",
-        "placeholder": "Enter your email",
+        "heading": "Be the first to know the latest drops!",
+        "subheading": "Subscribe today and get 10% OFF your first order + updates and offers.",
+        "placeholder": "Email Address",
         "button_text": "Subscribe",
         "success_message": "Thanks for subscribing!",
-        "button_background": "",
-        "button_text_color": "",
-        "background_color": "",
+        "button_background": "{{ settings.color_palette.color3 }}",
+        "button_text_color": "{{ settings.color_palette.foreground }}",
+        "background_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 48,
         "padding_bottom": 48
       }
