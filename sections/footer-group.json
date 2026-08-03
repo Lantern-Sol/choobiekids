@@ -91,10 +91,10 @@
               "type": "text",
               "name": "Text",
               "settings": {
-                "text": "<p>Get exclusive deals and early access to new products.</p>",
+                "text": "<p>Made by parents. Built for healthy movement. <br/>Designed with safety in mind.</p>",
                 "mobile_text": "",
                 "width": "100%",
-                "max_width": "normal",
+                "max_width": "none",
                 "alignment": "left",
                 "height_mode": "auto",
                 "desktop_height": "",
