@@ -101,11 +101,11 @@
       },
       "settings": {
         "logo_position": "left",
-        "center_logo_mobile": false,
+        "center_logo_mobile": true,
         "menu_position": "center",
         "menu_row": "top",
         "customer_account_menu": "customer-account-main-menu",
-        "show_account_mobile": false,
+        "show_account_mobile": true,
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
