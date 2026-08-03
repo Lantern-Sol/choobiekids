@@ -61,7 +61,7 @@
     "show_cart_note": false,
     "show_add_discount_code": true,
     "drawer_border_color": "#EDF0EE",
-    "icon_stroke": "default",
+    "icon_stroke": "thin",
     "palette_input_border": "{{ settings.color_palette.color3 }}",
     "input_border_width": 1,
     "inputs_border_radius": 4,
