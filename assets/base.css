@@ -4941,6 +4941,14 @@ slideshow-arrows .slideshow-control.slideshow-control--style-none {
   .group-block-content {
     height: auto;
   }
+
+  /* Featured cards must keep full height on mobile so the vertical "Position"
+     setting (e.g. Bottom) still applies, matching desktop. Without this the
+     content wrapper collapses to its content and flex-end has no room to push
+     content down. */
+  .collection-featured-card .group-block-content {
+    height: 100%;
+  }
 }
 
 /* Container styles */

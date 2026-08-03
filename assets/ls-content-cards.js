@@ -41,7 +41,9 @@ if (!customElements.get('ls-content-cards')) {
       const index = Number(event.currentTarget.dataset.cardDot);
       const card = this.cards[index];
       if (!card) return;
-      this.scroller.scrollTo({ left: card.offsetLeft - this.scroller.offsetLeft, behavior: 'smooth' });
+      // inline: 'start' respects the scroller's scroll-padding, so the card
+      // lands at the page gutter; block: 'nearest' avoids a vertical jump.
+      card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
     }
 
     onIntersect(entries) {

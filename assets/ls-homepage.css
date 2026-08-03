@@ -212,13 +212,16 @@
   content-visibility: visible;
 }
 
+/* Left edge stays at the normal content column; right edge bleeds to the true
+   screen edge so the peeking next card reaches the section edge instead of
+   stopping at the page gutter. Applies at every breakpoint — mobile peeks one
+   card, desktop peeks a third. */
+.ls-testimonials-section .ls-testimonials__slider {
+  grid-column: 2 / 4;
+}
+
 
 @media screen and (min-width: 750px) {
-  /* Left edge stays at the normal content column; right edge bleeds to the true screen edge */
-  .ls-testimonials-section .ls-testimonials__slider {
-    grid-column: 2 / 4;
-  }
-
   /* Fixed card width from Figma (340px image + 24px gap + 287px content) instead of an
      even container split, so a third card has room to peek past the visible edge */
   .ls-testimonials-section slideshow-slide {
@@ -399,13 +402,25 @@
    on mobile" setting). Desktop keeps the 3-column grid untouched. */
 @media screen and (max-width: 749px) {
   .ls-content-cards__grid--scroll-mobile {
+    /* Width of the page's outer margin — same formula as .ls-editorial so the
+       scroller bleeds to the exact viewport edge. On mobile this resolves to
+       --page-margin (the section's left/right gutter). */
+    --content-cards-bleed: max(
+      var(--page-margin, 12px),
+      calc((100vw - var(--page-content-width, 90rem)) / 2)
+    );
     grid-template-columns: none;
     grid-auto-flow: column;
     grid-auto-columns: min(17.5rem, 80%); /* 280px card from Figma, capped so the next card always peeks */
     gap: 1rem; /* 16px between cards — Figma */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline-start: 0;
+    /* Bleed both edges out to the viewport, then re-pad by the gutter so the
+       first card still lines up with the page margin while the peeking card
+       reaches the section edge (no leftover gap on the right). */
+    margin-inline: calc(var(--content-cards-bleed) * -1);
+    padding-inline: var(--content-cards-bleed);
+    scroll-padding-inline-start: var(--content-cards-bleed);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* hide the scrollbar; the dashes are the affordance */
   }
@@ -845,7 +860,7 @@
 .ls-editorial__subtitle {
   font-family: var(--font-handwritten);
   font-size: 1.375rem;
-  color: #4A6B57;
+  color: var(--editorial-accent, #4A6B57);
   margin: 0;
 }
 
@@ -863,7 +878,7 @@
 }
 
 .ls-editorial__heading-accent {
-  color: #4A6B57;
+  color: var(--editorial-accent, #4A6B57);
 }
 
 .ls-editorial__body {
