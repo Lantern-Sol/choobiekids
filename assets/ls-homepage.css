@@ -227,6 +227,20 @@
   }
 }
 
+@media screen and (max-width: 749px) {
+  /* Figma mobile: one card ~83% of the column, left-aligned, with the next testimonial
+     peeking past the right edge. Overrides the base 100% (--slides-per-view-mobile: 1). */
+  .ls-testimonials-section slideshow-slides {
+    --slideshow-gap: 1.5rem;
+  }
+
+  .ls-testimonials-section slideshow-slide {
+    width: 83%;
+    flex: 0 0 83%;
+    scroll-snap-align: start;
+  }
+}
+
 /* Card layout */
 .ls-testimonial-card {
   display: flex;
@@ -377,6 +391,64 @@
   }
 }
 
+.ls-content-cards__carousel {
+  display: block;
+}
+
+/* Mobile horizontal scroll (opt-in via the section's "Enable horizontal scroll
+   on mobile" setting). Desktop keeps the 3-column grid untouched. */
+@media screen and (max-width: 749px) {
+  .ls-content-cards__grid--scroll-mobile {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(17.5rem, 80%); /* 280px card from Figma, capped so the next card always peeks */
+    gap: 1rem; /* 16px between cards — Figma */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* hide the scrollbar; the dashes are the affordance */
+  }
+
+  .ls-content-cards__grid--scroll-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ls-content-cards__grid--scroll-mobile > .ls-content-card {
+    scroll-snap-align: start;
+  }
+}
+
+/* Progress dashes — only shown alongside the mobile scroller */
+.ls-content-cards__dots {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .ls-content-cards__grid--scroll-mobile ~ .ls-content-cards__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem; /* 8px between dashes — Figma */
+    margin-block-start: 1.5rem;
+  }
+
+  .ls-content-cards__dot {
+    width: 2rem; /* 32px dash — Figma */
+    height: 0.125rem; /* 2px */
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background-color: var(--content-cards-text-color, currentColor);
+    opacity: 0.35;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .ls-content-cards__dot.is-active {
+    opacity: 1;
+  }
+}
+
 .ls-content-card {
   display: flex;
   flex-direction: column;
@@ -412,7 +484,7 @@
 .ls-content-card__link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.9rem;
   font-weight: 700;
   font-size: 1rem;
   text-decoration: none;
@@ -427,7 +499,14 @@
 .ls-content-card__link svg {
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
   transition: transform 0.2s ease;
+}
+
+/* Figma chevron (angle-right-solid) is tall/narrow — size by height, keep aspect ratio */
+.ls-content-card__link svg.ls-content-card__link-chevron {
+  width: auto;
+  height: 1.1rem;
 }
 
 .ls-content-card__link:hover svg {
@@ -607,69 +686,107 @@
 /* ----------------------------------------------------------
    Newsletter
    ---------------------------------------------------------- */
-.ls-newsletter {
-  padding-block: 3rem;
-}
-
 .ls-newsletter__wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* 24px — Figma mobile stack */
 }
 
 @media screen and (min-width: 750px) {
-  .ls-newsletter {
-    padding-block: 4rem;
+  .ls-newsletter__wrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    /* Figma insets the newsletter content an extra 40px beyond the section
+       gutter (80px total vs 40px), which lands text/form at 560px/612px */
+    padding-inline: 2.5rem;
   }
 
-  .ls-newsletter__wrapper {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+  /* Text container is narrower than other sections per Figma (560px) */
+  .ls-newsletter__content {
+    max-width: 35rem;
+  }
+
+  .ls-newsletter__form-wrapper {
+    width: 38.25rem; /* 612px — Figma input+button group */
+    max-width: 50%;
+    flex-shrink: 0;
   }
 }
 
 .ls-newsletter__content {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  color: var(--newsletter-text-color, var(--color-foreground));
 }
 
 .ls-newsletter__heading {
   margin: 0;
+  font-family: var(--newsletter-heading-font-family);
+  font-weight: var(--newsletter-heading-font-weight, 700);
+  /* Figma H4: 32px desktop, 28px mobile — scale down 0.875x on mobile */
+  font-size: calc(var(--newsletter-heading-font-size, 2rem) * 0.875);
+  line-height: 1.2;
+}
+
+.ls-newsletter__heading-highlight {
+  color: var(--newsletter-accent-color);
+}
+
+/* Figma mobile breaks the accent phrase onto its own line; desktop is inline */
+@media screen and (max-width: 749px) {
+  .ls-newsletter__heading-highlight {
+    display: block;
+  }
 }
 
 .ls-newsletter__subheading {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  opacity: 0.8;
+  font-family: var(--newsletter-content-font-family);
+  font-weight: var(--newsletter-content-font-weight, 400);
+  font-size: var(--newsletter-content-font-size, 1rem);
+  line-height: 1.2;
+}
+
+.ls-newsletter__subheading > :first-child {
+  margin-block-start: 0;
+}
+
+.ls-newsletter__subheading > :last-child {
+  margin-block-end: 0;
 }
 
 .ls-newsletter__form {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .ls-newsletter__input {
   flex: 1;
-  padding: 0.75rem 1rem;
-  border: 0.0625rem solid var(--color-foreground-opacity-10, rgba(0, 0, 0, 0.1));
-  border-radius: var(--inputs-border-radius, 0.25rem);
+  min-width: 0;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  border: 0.0625rem solid var(--newsletter-input-border-color, var(--color-foreground-opacity-10, rgba(0, 0, 0, 0.1)));
+  border-radius: var(--newsletter-input-radius, 2rem);
   font-size: 0.875rem;
-  background: transparent;
+  background: var(--newsletter-input-background, #fffffb);
   color: var(--color-foreground);
 }
 
 .ls-newsletter__input::placeholder {
-  opacity: 0.5;
+  color: var(--newsletter-placeholder-color, var(--color-foreground));
+  opacity: 1;
 }
 
 .ls-newsletter__submit {
   padding: 0.75rem 1.5rem;
+  min-height: 3rem;
   border: none;
   border-radius: var(--button-border-radius-primary, 3.125rem);
-  font-weight: 600;
-  font-size: 0.875rem;
+  font-family: var(--newsletter-button-font-family);
+  font-weight: var(--newsletter-button-font-weight, 700);
+  font-size: var(--newsletter-button-font-size, 1rem);
+  line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.2s ease;
@@ -682,6 +799,12 @@
 .ls-newsletter__message {
   font-size: 0.875rem;
   margin-block-start: 0.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .ls-newsletter__heading {
+    font-size: var(--newsletter-heading-font-size, 2rem);
+  }
 }
 
 /* ----------------------------------------------------------
@@ -778,7 +901,7 @@
 }
 
 .ls-editorial__image {
-  border-radius: 0.75rem;
+  border-radius: var(--editorial-image-radius, 0.75rem);
   overflow: hidden;
   height: 22rem;
 }
@@ -809,8 +932,69 @@
   object-fit: contain;
 }
 
-.ls-editorial .page-width {
+/* Clip any sub-pixel / scrollbar overshoot from a full-bleed image at the
+   viewport edge. X-only so a floating icon can still poke above/below. */
+.ls-editorial {
   overflow-x: clip;
+}
+
+/* The icon's clip container. Matches the old `.ls-editorial .page-width`
+   behaviour exactly: same box as .page-width (inset: 0 on the relatively
+   positioned .page-width), X-clipped so the icon never triggers a horizontal
+   scrollbar, Y visible so it can drift above/below the section. Kept separate
+   from .page-width so the editorial image can bleed past the page-width edge. */
+.ls-editorial__icon-clip {
+  position: absolute;
+  inset: 0;
+  overflow-x: clip;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Full-bleed image — reach the outer viewport edge (Figma editorial layout).
+   --editorial-bleed is the width of the page's outer margin: the gap between
+   the page-width edge and the viewport edge. Uses plain lengths (not the
+   theme's %-based offset var) so it resolves correctly here in a nested
+   context. */
+.ls-editorial__grid--bleed .ls-editorial__media {
+  --editorial-bleed: max(
+    var(--page-margin, 12px),
+    calc((100vw - var(--page-content-width, 90rem)) / 2)
+  );
+}
+
+@media screen and (max-width: 749px) {
+  /* Single column: bleed both sides to a full-width image. */
+  .ls-editorial__grid--bleed .ls-editorial__media {
+    margin-inline: calc(var(--editorial-bleed) * -1);
+  }
+
+  .ls-editorial__grid--bleed .ls-editorial__image {
+    border-radius: 0;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  /* Two columns: bleed only the outer side (matches image position). */
+  .ls-editorial__grid--bleed:not(.ls-editorial__grid--image-left) .ls-editorial__media {
+    margin-right: calc(var(--editorial-bleed) * -1);
+  }
+
+  .ls-editorial__grid--bleed.ls-editorial__grid--image-left .ls-editorial__media {
+    margin-left: calc(var(--editorial-bleed) * -1);
+  }
+
+  /* Square off the corners that now sit against the viewport edge, whatever
+     radius is set for the inner corners. */
+  .ls-editorial__grid--bleed:not(.ls-editorial__grid--image-left) .ls-editorial__image {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .ls-editorial__grid--bleed.ls-editorial__grid--image-left .ls-editorial__image {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }
 
 .ls-editorial__floating-icon {

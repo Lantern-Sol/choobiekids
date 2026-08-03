@@ -9,6 +9,9 @@
     --padding-block-start: {{ section.settings.padding_top }}px;
     --padding-block-end: {{ section.settings.padding_bottom }}px;
   }
+  #shopify-section-{{ section.id }} .ls-editorial__image {
+    --editorial-image-radius: {{ section.settings.image_border_radius }}px;
+  }
 {%- endstyle -%}
 
 <div class="ls-editorial section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
@@ -20,20 +23,28 @@
           assign icon_tag = 'ls-floating-icon-parallax'
         endif
       -%}
-      <{{ icon_tag }} class="ls-floating-choobie ls-editorial__floating-icon"
-        style="--icon-width: {{ section.settings.icon_width }}px; --icon-width-mobile: {{ section.settings.icon_width_mobile }}px; --icon-x: {{ section.settings.icon_x }}%; --icon-y: {{ section.settings.icon_y }}%; --icon-x-mobile: {{ section.settings.icon_x_mobile }}%; --icon-y-mobile: {{ section.settings.icon_y_mobile }}%; --icon-rotation: {{ section.settings.icon_rotation }}deg; --icon-rotation-mobile: {{ section.settings.icon_rotation_mobile }}deg;">
-        <img
-          src="{{ 'choobies-icon-2.svg' | asset_url }}"
-          alt=""
-          width="145"
-          height="123"
-          loading="lazy"
-          class="ls-floating-choobie__img"
-        >
-      </{{ icon_tag }}>
+      {% comment %}
+        The icon lives in its own clip container so its horizontal overflow is
+        clipped at the page-width edges (unchanged behaviour). Keeping this
+        separate from .page-width lets the editorial image bleed past the
+        page-width edge without being clipped.
+      {% endcomment %}
+      <div class="ls-editorial__icon-clip">
+        <{{ icon_tag }} class="ls-floating-choobie ls-editorial__floating-icon"
+          style="--icon-width: {{ section.settings.icon_width }}px; --icon-width-mobile: {{ section.settings.icon_width_mobile }}px; --icon-x: {{ section.settings.icon_x }}%; --icon-y: {{ section.settings.icon_y }}%; --icon-x-mobile: {{ section.settings.icon_x_mobile }}%; --icon-y-mobile: {{ section.settings.icon_y_mobile }}%; --icon-rotation: {{ section.settings.icon_rotation }}deg; --icon-rotation-mobile: {{ section.settings.icon_rotation_mobile }}deg;">
+          <img
+            src="{{ 'choobies-icon-2.svg' | asset_url }}"
+            alt=""
+            width="145"
+            height="123"
+            loading="lazy"
+            class="ls-floating-choobie__img"
+          >
+        </{{ icon_tag }}>
+      </div>
     {% endif %}
 
-    <div class="ls-editorial__grid {% if section.settings.image_position == 'left' %}ls-editorial__grid--image-left{% endif %}">
+    <div class="ls-editorial__grid {% if section.settings.image_position == 'left' %}ls-editorial__grid--image-left{% endif %} {% if section.settings.image_full_bleed %}ls-editorial__grid--bleed{% endif %}">
       <div class="ls-editorial__content">
         {% if section.settings.subtitle != blank %}
           <p class="ls-editorial__subtitle">{{ section.settings.subtitle }}</p>
@@ -144,6 +155,23 @@
         { "value": "left", "label": "Left" }
       ],
       "default": "right"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_full_bleed",
+      "label": "Extend image to screen edge",
+      "default": false,
+      "info": "Removes the outer margin so the image bleeds to the edge of the screen (both edges on mobile). Only affects this section's image."
     },
     {
       "type": "checkbox",

@@ -20,27 +20,85 @@
    {% if block_settings.aspect_ratio_mobile != blank %}--size-style-aspect-ratio-mobile: {{ block_settings.aspect_ratio_mobile }};{% endif %}
 {% endcapture %}
 
-{% if block_settings.source == 'uploaded' %}
-  {% render 'video',
-    video: block_settings.video,
-    video_class: 'spacing-style size-style border-style',
-    video_loop: block_settings.video_loop,
-    video_style: video_style,
-    video_preview_image: block_settings.video.preview_image,
-    additional_attributes: block.shopify_attributes
-  %}
-{% else %}
-  {% render 'video',
-    video_from_url: true,
-    video: block_settings.video_url.id,
-    video_class: 'spacing-style size-style border-style',
-    video_type: block_settings.video_url.type,
-    video_style: video_style,
-    video_alt: block_settings.alt,
-    video_preview_image: block_settings.cover_image,
-    additional_attributes: block.shopify_attributes
-  %}
-{% endif %}
+{%- liquid
+  # Map the 9-point button anchor to flex align/justify tracks. The overlay is
+  # a flex box covering the media; vertical = align-items, horizontal = justify-content.
+  case block_settings.button_position
+    when 'top-left'
+      assign button_align = 'flex-start'
+      assign button_justify = 'flex-start'
+    when 'top-center'
+      assign button_align = 'flex-start'
+      assign button_justify = 'center'
+    when 'top-right'
+      assign button_align = 'flex-start'
+      assign button_justify = 'flex-end'
+    when 'middle-left'
+      assign button_align = 'center'
+      assign button_justify = 'flex-start'
+    when 'middle-center'
+      assign button_align = 'center'
+      assign button_justify = 'center'
+    when 'middle-right'
+      assign button_align = 'center'
+      assign button_justify = 'flex-end'
+    when 'bottom-left'
+      assign button_align = 'flex-end'
+      assign button_justify = 'flex-start'
+    when 'bottom-right'
+      assign button_align = 'flex-end'
+      assign button_justify = 'flex-end'
+    else
+      assign button_align = 'flex-end'
+      assign button_justify = 'center'
+  endcase
+-%}
+
+<div
+  class="video-block"
+  style="--video-button-align: {{ button_align }}; --video-button-justify: {{ button_justify }};"
+  {{ block.shopify_attributes }}
+>
+  {% if block_settings.source == 'uploaded' %}
+    {% render 'video',
+      video: block_settings.video,
+      video_class: 'spacing-style size-style border-style',
+      video_loop: block_settings.video_loop,
+      video_style: video_style,
+      video_preview_image: block_settings.video.preview_image
+    %}
+  {% else %}
+    {% render 'video',
+      video_from_url: true,
+      video: block_settings.video_url.id,
+      video_class: 'spacing-style size-style border-style',
+      video_type: block_settings.video_url.type,
+      video_style: video_style,
+      video_alt: block_settings.alt,
+      video_preview_image: block_settings.cover_image
+    %}
+  {% endif %}
+
+  {%- if block_settings.button_label != blank -%}
+    <div class="video-block__overlay">
+      <a
+        class="{{ block_settings.button_style }} video-block__button"
+        {% if block_settings.button_link == blank %}
+          role="link"
+          aria-disabled="true"
+        {% else %}
+          href="{{ block_settings.button_link }}"
+        {% endif %}
+        {%- if block_settings.button_open_in_new_tab -%}
+          target="_blank"
+          rel="noopener noreferrer"
+        {%- endif -%}
+      >
+        {{ block_settings.button_label }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
 
 {% stylesheet %}
   .placeholder-video {
@@ -75,6 +133,36 @@
     deferred-media[style*='--size-style-aspect-ratio-mobile'] {
       --size-style-aspect-ratio: var(--size-style-aspect-ratio-mobile) !important;
     }
+  }
+
+  /* Positioning context for the button overlay; full-width in the flex column. */
+  .video-block {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Blockify the media (custom element defaults to inline, ignoring aspect-ratio). */
+  .video-block > deferred-media,
+  .video-block > .video-placeholder-wrapper {
+    display: block;
+  }
+
+  /* Full-media flex layer that anchors the button. pointer-events:none lets
+     clicks fall through to the play/pause poster button underneath; the button
+     itself re-enables them so it stays clickable. */
+  .video-block__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: var(--video-button-align, flex-end);
+    justify-content: var(--video-button-justify, center);
+    padding: 1.5rem;
+    pointer-events: none;
+  }
+
+  .video-block__button {
+    pointer-events: auto;
   }
 {% endstylesheet %}
 
@@ -141,6 +229,58 @@
     },
     {
       "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Leave blank to hide the button."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false,
+      "visible_if": "{{ block.settings.button_label != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button-secondary", "label": "Secondary" },
+        { "value": "button-unstyled", "label": "Link" }
+      ],
+      "default": "button",
+      "visible_if": "{{ block.settings.button_label != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "button_position",
+      "label": "Button position",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "bottom-center",
+      "visible_if": "{{ block.settings.button_label != blank }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.size"
     },
     {
@@ -175,7 +315,9 @@
         { "value": "4/5", "label": "Portrait 4:5" },
         { "value": "1/1", "label": "Square" },
         { "value": "6.9/5", "label": "Landscape 6.9:5" },
-        { "value": "16/9", "label": "Landscape 16:9" }
+        { "value": "16/9", "label": "Landscape 16:9" },
+        { "value": "18/7", "label": "Short banner 18:7" },
+        { "value": "4/1", "label": "Short banner 4:1" }
       ],
       "default": "auto"
     },
@@ -193,7 +335,9 @@
         { "value": "9/16", "label": "Portrait 9:16" },
         { "value": "1/1", "label": "Square" },
         { "value": "6.9/5", "label": "Landscape 6.9:5" },
-        { "value": "16/9", "label": "Landscape 16:9" }
+        { "value": "16/9", "label": "Landscape 16:9" },
+        { "value": "39/56", "label": "Portrait 39:56" },
+        { "value": "13/12", "label": "Short banner 13:12" }
       ],
       "default": ""
     },

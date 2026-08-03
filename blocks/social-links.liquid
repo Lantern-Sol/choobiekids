@@ -1,14 +1,17 @@
 <div
-  class="social-icons__wrapper social-icons__wrapper--{{ block.id }}"
+  class="social-icons__wrapper social-icons__wrapper--{{ block.id }}{% if block.settings.background_color != blank %} social-icons__wrapper--badges{% endif %}"
+  style="
+    --social-gap: {{ block.settings.gap }}px;
+    --social-alignment: {{ block.settings.alignment }};
+    {% if block.settings.alignment_mobile != blank %}--social-alignment-mobile: {{ block.settings.alignment_mobile }};{% endif %}
+    --social-icon-size: {{ block.settings.icon_size }}px;
+    --social-badge-padding: {{ block.settings.badge_padding }}px;
+    --social-badge-radius: {{ block.settings.corner_radius }}px;
+    {% if block.settings.background_color != blank %}--social-badge-bg: {{ block.settings.background_color }};{% endif %}
+    {% if block.settings.icon_color != blank %}--color-utilities: {{ block.settings.icon_color }};{% endif %}
+  "
   {{ block.shopify_attributes }}
 >
-  {% if block.settings.icon_color != blank %}
-    {% style %}
-      .social-icons__wrapper--{{ block.id }} {
-        --color-utilities: {{ block.settings.icon_color }};
-      }
-    {% endstyle %}
-  {% endif %}
   {% liquid
     assign social_links = 'facebook_url,instagram_url,youtube_url,tiktok_url,twitter_url,threads_url,linkedin_url,bluesky_url,snapchat_url,pinterest_url,tumblr_url,vimeo_url,custom_url' | split: ','
   %}
@@ -115,13 +118,15 @@
 {% stylesheet %}
   .social-icons__wrapper {
     display: flex;
-    gap: var(--gap-sm);
+    gap: var(--social-gap, var(--gap-sm));
     flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
+    justify-content: var(--social-alignment, center);
+  }
 
-    @media screen and (min-width: 750px) {
-      flex-wrap: nowrap;
-      justify-content: flex-start;
+  @media screen and (max-width: 749px) {
+    .social-icons__wrapper {
+      justify-content: var(--social-alignment-mobile, var(--social-alignment, center));
     }
   }
 
@@ -129,23 +134,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: var(--icon-size-lg);
+    padding: var(--social-badge-padding, 0);
+    background-color: var(--social-badge-bg, transparent);
+    border-radius: var(--social-badge-radius, 0);
   }
 
-  .social-icons__icon {
+  .social-icons__icon-wrapper a {
     display: flex;
-    flex-shrink: 0;
-    width: var(--icon-size-lg);
-    height: var(--icon-size-lg);
+    align-items: center;
+    justify-content: center;
+    color: var(--color-utilities, var(--color-foreground));
   }
 
   .social-icons__icon {
     display: none;
+    flex-shrink: 0;
+    width: var(--social-icon-size, var(--icon-size-lg));
+    height: var(--social-icon-size, var(--icon-size-lg));
   }
 
   .social-icons__icon-wrapper:has(.social-icons__icon path) {
-    width: var(--icon-size-lg);
-
     .social-icons__icon {
       display: block;
     }
@@ -180,6 +188,103 @@
       "id": "icon_color",
       "label": "t:settings.color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Icon background",
+      "info": "Leave empty for plain icons. Set a color to show icons inside filled badges.",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "t:settings.corner_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_padding",
+      "label": "Icon padding",
+      "info": "Space around the icon inside its badge.",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "t:content.layout"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "flex-end",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "alignment_mobile",
+      "label": "Alignment (mobile)",
+      "info": "Overrides alignment on screens under 750px.",
+      "options": [
+        {
+          "value": "",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "flex-start",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "flex-end",
+          "label": "t:options.right"
+        }
+      ],
+      "default": ""
     },
     {
       "type": "header",

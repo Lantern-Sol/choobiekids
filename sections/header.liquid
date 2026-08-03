@@ -326,6 +326,9 @@
   class="{{ class }}"
   data-theme-color="rgb({{ section.settings.background_color_top.rgb | default: settings.page_background_color.rgb }})"
   data-bubble-style="{{ section.settings.bubble_style }}"
+  {% if section.settings.center_logo_mobile %}
+    data-mobile-layout="centered"
+  {% endif %}
   {% if transparent %}
     transparent="{{ transparent }}"
   {% endif %}
@@ -922,6 +925,34 @@
     }
   }
 
+  /* Centered logo on mobile: reorder to hamburger + search | logo | actions. Logo stays a direct grid item
+     (default sizing preserved), centered in the middle column. Mobile-only, so desktop is untouched. */
+  @media screen and (max-width: 749px) {
+    #header-component[data-mobile-layout='centered'] .header__columns {
+      --header-template-columns: auto auto 1fr auto;
+
+      grid-template-areas: 'menu search logo actions';
+      padding-inline: var(--padding-sm);
+    }
+
+    #header-component[data-mobile-layout='centered'] .header-logo {
+      grid-area: logo;
+      justify-self: center;
+    }
+  }
+
+  #header-component[data-menu-style='drawer'][data-mobile-layout='centered'] .header__columns {
+    --header-template-columns: auto auto 1fr auto;
+
+    grid-template-areas: 'menu search logo actions';
+    padding-inline: var(--padding-sm);
+  }
+
+  #header-component[data-menu-style='drawer'][data-mobile-layout='centered'] .header-logo {
+    grid-area: logo;
+    justify-self: center;
+  }
+
   /* Single column layout if there are no columns within */
   .header__columns:not(:has(.header__column)) {
     grid-template-columns: 1fr;
@@ -1219,6 +1250,12 @@
       "default": "center"
     },
     {
+      "type": "checkbox",
+      "id": "center_logo_mobile",
+      "label": "t:settings.center_logo_mobile",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "t:content.menu"
     },
@@ -1271,6 +1308,12 @@
       "id": "customer_account_menu",
       "label": "t:settings.menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_mobile",
+      "label": "t:settings.show_account_mobile",
+      "default": false
     },
     {
       "type": "header",

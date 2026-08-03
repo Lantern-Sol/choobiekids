@@ -43,6 +43,7 @@
     style="
       {%  render 'spacing-style', settings: section.settings %}
       --footer-gap: {{ section.settings.gap }}px;
+      --footer-gap-mobile: {{ section.settings.gap_mobile | default: section.settings.gap }}px;
       --grid-columns: {{ grid_columns }};
       --last-row-count: {{ last_row_count }};
       --tablet-last-row-count: {{ tablet_last_row_count }};
@@ -58,8 +59,14 @@
     content-visibility: auto;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--footer-gap);
+    gap: var(--footer-gap-mobile, var(--footer-gap));
     align-items: start;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer-content {
+      gap: var(--footer-gap);
+    }
   }
 
   .footer-content .menu__heading__default {
@@ -174,6 +181,17 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Gap (mobile)",
+      "info": "Vertical spacing between footer blocks on screens under 750px.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "color",

@@ -12,10 +12,19 @@
   {{ block.shopify_attributes }}
 >
   <span class="footer-utilities__text">
-    &copy; {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url -}}
-    {%- if block_settings.show_powered_by -%}
-      , {{ powered_by_link }}
+    &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}
+    {%- if block_settings.show_credit and block_settings.credit_link_text != blank %}
+      | {{ block_settings.credit_prefix }}
+      {%- if block_settings.credit_url != blank %}
+        <a
+          class="footer-utilities__credit-link"
+          href="{{ block_settings.credit_url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >{{ block_settings.credit_link_text }}</a>
+      {%- else %}
+        {{ block_settings.credit_link_text }}
+      {%- endif %}
     {%- endif -%}
   </span>
 </div>
@@ -23,6 +32,11 @@
 {% stylesheet %}
   .footer-utilities__group-copyright {
     color: var(--color-utilities, var(--color-foreground-muted));
+  }
+
+  .footer-utilities__credit-link {
+    text-decoration: underline;
+    text-underline-position: from-font;
   }
 {% endstylesheet %}
 
@@ -33,9 +47,29 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_powered_by",
-      "label": "t:settings.show_powered_by_shopify",
+      "id": "show_credit",
+      "label": "Show credit",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "credit_prefix",
+      "label": "Credit text",
+      "default": "Designed by",
+      "visible_if": "{{ block.settings.show_credit }}"
+    },
+    {
+      "type": "text",
+      "id": "credit_link_text",
+      "label": "Credit link label",
+      "default": "LanternSol",
+      "visible_if": "{{ block.settings.show_credit }}"
+    },
+    {
+      "type": "url",
+      "id": "credit_url",
+      "label": "Credit link",
+      "visible_if": "{{ block.settings.show_credit }}"
     },
     {
       "type": "paragraph",

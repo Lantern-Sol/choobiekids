@@ -1,6 +1,10 @@
 {{ 'ls-homepage.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+  {{ section.settings.content_font | font_face: font_display: 'swap' }}
+  {{ section.settings.button_font | font_face: font_display: 'swap' }}
+
   #shopify-section-{{ section.id }} {
     {% if section.settings.background_color != blank %}
       --color-background: {{ section.settings.background_color }};
@@ -8,11 +12,31 @@
     {% endif %}
     --padding-block-start: {{ section.settings.padding_top }}px;
     --padding-block-end: {{ section.settings.padding_bottom }}px;
+
+    --newsletter-text-color: {{ section.settings.text_color }};
+    --newsletter-accent-color: {{ section.settings.accent_color }};
+
+    --newsletter-heading-font-family: {{ section.settings.heading_font.family }}, {{ section.settings.heading_font.fallback_families }};
+    --newsletter-heading-font-weight: {{ section.settings.heading_font.weight }};
+    --newsletter-heading-font-size: {{ section.settings.heading_font_size }}px;
+
+    --newsletter-content-font-family: {{ section.settings.content_font.family }}, {{ section.settings.content_font.fallback_families }};
+    --newsletter-content-font-weight: {{ section.settings.content_font.weight }};
+    --newsletter-content-font-size: {{ section.settings.content_font_size }}px;
+
+    --newsletter-button-font-family: {{ section.settings.button_font.family }}, {{ section.settings.button_font.fallback_families }};
+    --newsletter-button-font-weight: {{ section.settings.button_font.weight }};
+    --newsletter-button-font-size: {{ section.settings.button_font_size }}px;
+
+    --newsletter-input-background: {{ section.settings.input_background }};
+    --newsletter-input-border-color: {{ section.settings.input_border_color }};
+    --newsletter-input-radius: {{ section.settings.input_border_radius }}px;
+    --newsletter-placeholder-color: {{ section.settings.placeholder_color }};
   }
 
   #shopify-section-{{ section.id }} .ls-newsletter__submit {
-    background-color: {{ section.settings.button_background | default: settings.color_palette.color1 }};
-    color: {{ section.settings.button_text_color | default: settings.color_palette.background }};
+    background-color: {{ section.settings.button_background | default: settings.color_palette.color3 }};
+    color: {{ section.settings.button_text_color | default: settings.color_palette.foreground }};
   }
 {%- endstyle -%}
 
@@ -21,11 +45,18 @@
     <div class="ls-newsletter__wrapper">
       <div class="ls-newsletter__content">
         {% if section.settings.heading != blank %}
-          <h2 class="ls-newsletter__heading h3">{{ section.settings.heading }}</h2>
+          {% liquid
+            assign heading_html = section.settings.heading
+            if section.settings.heading_accent != blank and section.settings.heading contains section.settings.heading_accent
+              assign accent_span = '<span class="ls-newsletter__heading-highlight">' | append: section.settings.heading_accent | append: '</span>'
+              assign heading_html = section.settings.heading | replace: section.settings.heading_accent, accent_span
+            endif
+          %}
+          <h2 class="ls-newsletter__heading">{{ heading_html }}</h2>
         {% endif %}
 
         {% if section.settings.subheading != blank %}
-          <p class="ls-newsletter__subheading">{{ section.settings.subheading }}</p>
+          <div class="ls-newsletter__subheading">{{ section.settings.subheading }}</div>
         {% endif %}
       </div>
 
@@ -78,22 +109,33 @@
   "class": "ls-newsletter-section",
   "settings": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Stay in the loop"
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Be the first to know the latest drops!"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Accent text",
+      "info": "If this text appears in the heading above, it's highlighted in the accent color.",
+      "default": "the latest drops!"
+    },
+    {
+      "type": "richtext",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Sign up for updates on new releases and exclusive offers."
+      "default": "<p>Subscribe today and get <strong>10% OFF</strong> your first order + updates and offers.</p>"
     },
     {
       "type": "text",
       "id": "placeholder",
       "label": "Input placeholder",
-      "default": "Enter your email"
+      "default": "Email Address"
     },
     {
       "type": "text",
@@ -108,19 +150,127 @@
       "default": "Thanks for subscribing!"
     },
     {
-      "type": "color",
-      "id": "button_background",
-      "label": "Button background color"
+      "type": "header",
+      "content": "Typography"
     },
     {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Button text color"
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "plus_jakarta_sans_n7"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 20,
+      "max": 56,
+      "step": 1,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "font_picker",
+      "id": "content_font",
+      "label": "Content font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "content_font_size",
+      "label": "Content font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "font_picker",
+      "id": "button_font",
+      "label": "Button font",
+      "default": "inter_n7"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
     },
     {
       "type": "color",
       "id": "background_color",
-      "label": "Background color"
+      "label": "Background color",
+      "default": "#4a6b57"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#fffffb"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the heading accent text.",
+      "default": "#ffd82f"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background color",
+      "default": "#ffd82f"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#2c353f"
+    },
+    {
+      "type": "header",
+      "content": "Input field"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Input background color",
+      "default": "#fffffb"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#87898b"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder color",
+      "default": "#87898b"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Input border rounding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
     },
     {
       "type": "range",
@@ -129,7 +279,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "default": 48,
+      "default": 56,
       "unit": "px"
     },
     {
@@ -139,7 +289,7 @@
       "min": 0,
       "max": 100,
       "step": 4,
-      "default": 48,
+      "default": 56,
       "unit": "px"
     }
   ],

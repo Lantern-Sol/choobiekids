@@ -187,6 +187,9 @@
     },
     {
       "type": "social-links"
+    },
+    {
+      "type": "payment-icons"
     }
   ],
   "presets": [
@@ -194,17 +197,17 @@
       "name": "t:names.policies_and_links",
       "category": "t:categories.footer",
       "blocks": {
-        "copyright": {
-          "type": "footer-copyright"
+        "payment_icons": {
+          "type": "payment-icons"
         },
         "policy_list": {
           "type": "footer-policy-list"
         },
-        "social_icons": {
-          "type": "social-links"
+        "copyright": {
+          "type": "footer-copyright"
         }
       },
-      "block_order": ["copyright", "policy_list", "social_icons"]
+      "block_order": ["payment_icons", "policy_list", "copyright"]
     }
   ]
 }

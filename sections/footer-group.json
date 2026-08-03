@@ -25,10 +25,10 @@
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
-            "use_mobile_alignment": false,
-            "mobile_horizontal_alignment": "flex-start",
+            "use_mobile_alignment": true,
+            "mobile_horizontal_alignment": "center",
             "mobile_vertical_alignment": "center",
-            "mobile_horizontal_alignment_flex_direction_column": "flex-start",
+            "mobile_horizontal_alignment_flex_direction_column": "center",
             "mobile_vertical_alignment_flex_direction_column": "center",
             "gap": 12,
             "use_mobile_gap": false,
@@ -87,15 +87,18 @@
               },
               "blocks": {}
             },
-            "text_HafH7P": {
+            "tagline_choobie": {
               "type": "text",
-              "name": "Text",
+              "name": "Tagline",
               "settings": {
                 "text": "<p>Made by parents. Built for healthy movement. <br/>Designed with safety in mind.</p>",
+                "accent_text": "Made by parents.",
+                "accent_font_size": "1.375rem",
                 "mobile_text": "",
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "left",
+                "alignment_mobile": "center",
                 "height_mode": "auto",
                 "desktop_height": "",
                 "mobile_height": "",
@@ -110,7 +113,7 @@
                 "case": "none",
                 "wrap": "pretty",
                 "type_preset_mobile": "rte",
-                "mobile_font_size": "1rem",
+                "mobile_font_size": "0.875rem",
                 "mobile_custom_line_height": 1.5,
                 "text_color": "",
                 "background": false,
@@ -132,7 +135,14 @@
               "type": "social-links",
               "name": "t:names.social_media_links",
               "settings": {
-                "icon_color": "",
+                "icon_color": "{{ settings.color_palette.background }}",
+                "background_color": "{{ settings.color_palette.color1 }}",
+                "corner_radius": 50,
+                "icon_size": 18,
+                "badge_padding": 8,
+                "gap": 8,
+                "alignment": "flex-start",
+                "alignment_mobile": "center",
                 "facebook_url": "",
                 "instagram_url": "https://www.instagram.com/choobiekids",
                 "youtube_url": "",
@@ -152,7 +162,7 @@
           },
           "block_order": [
             "logo_hUwamR",
-            "text_HafH7P",
+            "tagline_choobie",
             "social_links_D9Ltyd"
           ]
         },
@@ -254,6 +264,7 @@
       "settings": {
         "section_width": "page-width",
         "gap": 40,
+        "gap_mobile": 20,
         "background_color": "{{ settings.color_palette.color2 }}",
         "padding-block-start": 36,
         "padding-block-end": 36
@@ -262,13 +273,16 @@
     "utilities": {
       "type": "footer-utilities",
       "blocks": {
-        "copyright": {
-          "type": "footer-copyright",
+        "payment_icons": {
+          "type": "payment-icons",
           "settings": {
-            "show_powered_by": true,
-            "text_color": "{{ settings.color_palette.foreground }}",
-            "font_size": "0.875rem",
-            "case": "none"
+            "horizontal_alignment": "flex-start",
+            "horizontal_alignment_mobile": "center",
+            "gap": 8,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -280,11 +294,25 @@
             "case": "none"
           },
           "blocks": {}
+        },
+        "copyright": {
+          "type": "footer-copyright",
+          "settings": {
+            "show_credit": true,
+            "credit_prefix": "Designed by",
+            "credit_link_text": "LanternSol",
+            "credit_url": "https://lanternsol.com",
+            "text_color": "{{ settings.color_palette.foreground }}",
+            "font_size": "0.875rem",
+            "case": "none"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "copyright",
-        "policy_list"
+        "payment_icons",
+        "policy_list",
+        "copyright"
       ],
       "settings": {
         "section_width": "page-width",

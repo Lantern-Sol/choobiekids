@@ -39,6 +39,7 @@
       data-testid="menu-details"
       style="
         --spacing--size: {{ block_settings.menu_spacing }}px;
+        --menu-item-gap-mobile: {{ block_settings.menu_spacing_mobile | default: 8 }}px;
         {% render 'spacing-style', settings: block_settings %}
       "
       {% if show_as_accordion == false %}
@@ -144,6 +145,12 @@
   }
 
   @media screen and (max-width: 749px) {
+    /* Tighter spacing between menu links on mobile */
+    .menu__item + .menu__item {
+      --spacing--size: var(--menu-item-gap-mobile, 0.5rem);
+      margin-block-end: 0;
+    }
+
     /* Always show the fallback heading on mobile when accordion is enabled */
     .menu--accordion .menu__heading--empty {
       display: flex;
@@ -204,6 +211,17 @@
       "step": 1,
       "unit": "px",
       "default": 12
+    },
+    {
+      "type": "range",
+      "id": "menu_spacing_mobile",
+      "label": "Vertical gap (mobile)",
+      "info": "Spacing between links on screens under 750px.",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 8
     },
     {
       "type": "checkbox",

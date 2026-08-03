@@ -11,6 +11,7 @@
     {% render 'spacing-padding', settings: block_settings %}
     --icon-gap: {{ block_settings.gap }}px;
     --alignment: {{ block_settings.horizontal_alignment }};
+    {% if block_settings.horizontal_alignment_mobile != blank %}--alignment-mobile: {{ block_settings.horizontal_alignment_mobile }};{% endif %}
   "
   {{ block.shopify_attributes }}
 >
@@ -40,6 +41,12 @@
     gap: var(--icon-gap);
     margin: 0;
     padding: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .payment-icons__list {
+      justify-content: var(--alignment-mobile, var(--alignment));
+    }
   }
 
   .payment-icons__item {
@@ -76,6 +83,31 @@
         }
       ],
       "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment_mobile",
+      "label": "Alignment (mobile)",
+      "info": "Overrides alignment on screens under 750px.",
+      "options": [
+        {
+          "value": "",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "flex-start",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "flex-end",
+          "label": "t:options.right"
+        }
+      ],
+      "default": ""
     },
     {
       "type": "range",

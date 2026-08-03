@@ -21,42 +21,75 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign mobile_scroll = section.settings.scroll_on_mobile
+  assign card_count = section.blocks | size
+-%}
+
 <div class="ls-content-cards section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
   <div class="page-width">
-    <div class="ls-content-cards__grid">
-      {% for block in section.blocks %}
-        <div class="ls-content-card" {{ block.shopify_attributes }}>
-          {% if block.settings.image != blank %}
-            <div class="ls-content-card__image">
-              {{ block.settings.image | image_url: width: 800 | image_tag:
-                loading: 'lazy',
-                widths: '400, 600, 800',
-                sizes: '(min-width: 750px) 33vw, 100vw'
-              }}
-            </div>
-          {% endif %}
+    <ls-content-cards class="ls-content-cards__carousel">
+      <div class="ls-content-cards__grid{% if mobile_scroll %} ls-content-cards__grid--scroll-mobile{% endif %}" data-cards-scroller>
+        {% for block in section.blocks %}
+          <div class="ls-content-card" data-card-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <div class="ls-content-card__image">
+                {{ block.settings.image | image_url: width: 800 | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 750px) 33vw, 100vw'
+                }}
+              </div>
+            {% endif %}
 
-          {% if block.settings.title != blank %}
-            <h4 class="ls-content-card__title">{{ block.settings.title }}</h4>
-          {% endif %}
+            {% if block.settings.title != blank %}
+              <h4 class="ls-content-card__title">{{ block.settings.title }}</h4>
+            {% endif %}
 
-          {% if block.settings.description != blank %}
-            <div class="ls-content-card__description">{{ block.settings.description }}</div>
-          {% endif %}
+            {% if block.settings.description != blank %}
+              <div class="ls-content-card__description">{{ block.settings.description }}</div>
+            {% endif %}
 
-          {% if block.settings.link != blank %}
-            <a href="{{ block.settings.link }}" class="ls-content-card__link">
-              {{ block.settings.link_text | default: 'Read more' }}
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M4 10h12M12 4l6 6-6 6"/>
-              </svg>
-            </a>
-          {% endif %}
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}" class="ls-content-card__link">
+                {{ block.settings.link_text | default: 'Read more' }}
+                {%- case section.settings.link_icon -%}
+                  {%- when 'chevron' -%}
+                    <svg class="ls-content-card__link-chevron" viewBox="0 0 9.84375 17.5781" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M1.07812 0L0 1.07812L7.71094 8.78906L0 16.5L1.07812 17.5781L9.32812 9.32812L9.84375 8.78906L9.32812 8.25L1.07812 0Z"/>
+                    </svg>
+                  {%- when 'arrow' -%}
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M4 10h12M12 4l6 6-6 6"/>
+                    </svg>
+                {%- endcase -%}
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if mobile_scroll and card_count > 1 %}
+        <div class="ls-content-cards__dots" aria-label="Content cards navigation">
+          {% for block in section.blocks %}
+            <button
+              type="button"
+              class="ls-content-cards__dot{% if forloop.first %} is-active{% endif %}"
+              data-card-dot="{{ forloop.index0 }}"
+              aria-label="Go to card {{ forloop.index }}"
+              {% if forloop.first %}aria-current="true"{% endif %}
+            ></button>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
+      {% endif %}
+    </ls-content-cards>
   </div>
 </div>
+
+{% if mobile_scroll %}
+  {% comment %} Loaded whenever the setting is on so the theme editor's AJAX section swap upgrades the custom element {% endcomment %}
+  <script src="{{ 'ls-content-cards.js' | asset_url }}" defer="defer"></script>
+{% endif %}
 
 {% schema %}
 {
@@ -87,6 +120,24 @@
       "id": "link_color",
       "label": "Link color",
       "default": "#fffffb"
+    },
+    {
+      "type": "select",
+      "id": "link_icon",
+      "label": "Link icon",
+      "options": [
+        { "value": "chevron", "label": "Chevron" },
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "chevron"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_on_mobile",
+      "label": "Enable horizontal scroll on mobile",
+      "info": "Cards scroll sideways with progress dashes on mobile instead of stacking. Desktop stays a 3-column grid.",
+      "default": false
     },
     {
       "type": "range",

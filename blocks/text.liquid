@@ -64,6 +64,20 @@
       "visible_if": "{{ block.settings.width == '100%' }}"
     },
     {
+      "type": "select",
+      "id": "alignment_mobile",
+      "label": "Alignment (mobile)",
+      "info": "Overrides text alignment on screens under 750px.",
+      "options": [
+        { "value": "", "label": "Same as desktop" },
+        { "value": "left", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "right", "label": "t:options.right" }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.width == '100%' }}"
+    },
+    {
       "type": "header",
       "content": "Height"
     },
@@ -176,6 +190,29 @@
       ],
       "default": "var(--font-body--family)",
       "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "text",
+      "id": "accent_text",
+      "label": "Accent text",
+      "info": "If this text appears in the text above, that portion is shown inline in the accent font."
+    },
+    {
+      "type": "select",
+      "id": "accent_font_size",
+      "label": "Accent size",
+      "options": [
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem", "label": "16px" },
+        { "value": "1.125rem", "label": "18px" },
+        { "value": "1.25rem", "label": "20px" },
+        { "value": "1.375rem", "label": "22px" },
+        { "value": "1.5rem", "label": "24px" },
+        { "value": "1.875rem", "label": "30px" },
+        { "value": "2rem", "label": "32px" }
+      ],
+      "default": "1.375rem",
+      "visible_if": "{{ block.settings.accent_text != blank }}"
     },
     {
       "type": "checkbox",
