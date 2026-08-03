@@ -1089,7 +1089,7 @@
           "type": "testimonial",
           "settings": {
             "image": "shopify://shop_images/testimonial-photo-1.webp",
-            "quote": "<p>My kids love their Choobie shoes! They run, jump, and play all day without complaints.</p>",
+            "quote": "<p>He puts them on himself now, two and a half years old. I did not expect a shoe to change my mornings.</p>",
             "author": "Maya R."
           }
         },
@@ -1097,15 +1097,15 @@
           "type": "testimonial",
           "settings": {
             "image": "shopify://shop_images/testimonial-photo-3.webp",
-            "quote": "<p>Finally found shoes that let my child's feet develop naturally. The quality is outstanding.</p>",
+            "quote": "<p>Our daughter has wide little feet and every other brand pinched. She stands on the insole and there's still room.</p>",
             "author": "Dan & Priya"
           }
         },
         "testimonial_3": {
           "type": "testimonial",
           "settings": {
-            "image": "shopify://shop_images/product-card-photo-1.webp",
-            "quote": "<p>These are the only shoes my daughter wants to wear. Comfortable and durable!</p>",
+            "image": "shopify://shop_images/testimonial-photo-1.webp",
+            "quote": "<p>Left one at the splash pad. Found it in eleven minutes. A twenty-minute search became a thirty-second one.</p>",
             "author": "Tom H."
           }
         }
