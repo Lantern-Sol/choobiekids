@@ -904,7 +904,7 @@
           "settings": {
             "position": 1,
             "size": "1x",
-            "hide_on_mobile": true,
+            "hide_on_mobile": false,
             "content_direction": "column",
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "flex-end",
