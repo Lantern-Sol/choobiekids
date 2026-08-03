@@ -1076,8 +1076,8 @@
       "type": "ls-editorial",
       "settings": {
         "subtitle": "The Pocket",
-        "heading_line_1": "A shoe",
-        "heading_line_2": "locator.",
+        "heading_line_1": "A shoe locator.",
+        "heading_line_2": "",
         "body": "<p>Choobies feature a built-in, AirTag-compatible compartment designed to help parents quickly find a missing shoe when life gets chaotic. The compartment keeps the AirTag enclosed, secure, and comfortably away from the foot.</p>",
         "spec_text": "<p>”An AirTag is designed to help locate belongings. Apple and AirTag are trademarks of Apple, Inc. Choobies is not endorsed, sponsored by or affiliated with Apple Inc.\"</p>",
         "spec_text_2": "",
