@@ -133,8 +133,8 @@
               "name": "t:names.social_media_links",
               "settings": {
                 "icon_color": "",
-                "facebook_url": "#",
-                "instagram_url": "",
+                "facebook_url": "",
+                "instagram_url": "https://www.instagram.com/choobiekids",
                 "youtube_url": "",
                 "tiktok_url": "#",
                 "twitter_url": "",
