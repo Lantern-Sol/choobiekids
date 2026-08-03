@@ -21,11 +21,14 @@
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
+            "alignment_mobile": "",
             "height_mode": "auto",
             "desktop_height": "",
             "mobile_height": "",
             "type_preset": "h2",
             "font": "var(--font-primary--family)",
+            "accent_text": "",
+            "accent_font_size": "1.375rem",
             "enable_custom_font_weight": false,
             "weight": "400",
             "font_size": "",
@@ -62,11 +65,14 @@
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
+            "alignment_mobile": "",
             "height_mode": "auto",
             "desktop_height": "",
             "mobile_height": "",
             "type_preset": "rte",
             "font": "var(--font-primary--family)",
+            "accent_text": "",
+            "accent_font_size": "1.375rem",
             "enable_custom_font_weight": false,
             "weight": "400",
             "font_size": "",
@@ -159,6 +165,37 @@
     "main": {
       "type": "main-collection",
       "blocks": {
+        "collection_featured_card_hkgDPD": {
+          "type": "_collection-featured-card",
+          "name": "Featured card",
+          "settings": {
+            "position": 1,
+            "size": "1x",
+            "hide_on_mobile": false,
+            "content_direction": "column",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-end",
+            "gap": 8,
+            "width": "fill",
+            "height": "fill",
+            "background_color": "",
+            "background_media": "image",
+            "background_image_position": "cover",
+            "video_position": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "gradient",
+            "gradient_direction": "to top",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "padding-block-start": 24,
+            "padding-block-end": 24,
+            "padding-inline-start": 24,
+            "padding-inline-end": 24
+          },
+          "blocks": {}
+        },
         "filters": {
           "type": "filters",
           "static": true,
@@ -293,6 +330,9 @@
           ]
         }
       },
+      "block_order": [
+        "collection_featured_card_hkgDPD"
+      ],
       "settings": {
         "layout_type": "grid",
         "product_card_size": "medium",
@@ -309,10 +349,104 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "ls_features_kU9KqM": {
+      "type": "ls-features",
+      "blocks": {
+        "feature_LUXP3a": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/feature-icon-1.svg",
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
+            "title": "Easy on, all-day play",
+            "description": "<p>Wide opening, one pull tab. They do it themselves.</p>"
+          }
+        },
+        "feature_mEfdy7": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/feature-icon-3.svg",
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
+            "title": "Built the way feet grow",
+            "description": "<p>Wide toe box, zero drop, a 5.5 mm flexible sole.</p>"
+          }
+        },
+        "feature_WHEhz7": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/feature-icon-2.svg",
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
+            "title": "Findable when it wanders",
+            "description": "<p>Built-in AirTag pocket. Find the shoe.</p>"
+          }
+        },
+        "feature_We6Rnf": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/feature-icon-4.svg",
+            "icon_background_color": "#4a6b57",
+            "icon_size": 56,
+            "icon_padding": 16,
+            "icon_border_radius": 12,
+            "title": "Sized in millimetres",
+            "description": "<p>No sizing guesswork. Measure, add, done.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_LUXP3a",
+        "feature_mEfdy7",
+        "feature_WHEhz7",
+        "feature_We6Rnf"
+      ],
+      "settings": {
+        "background_color": "#faf7f0",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "ls_newsletter_mypYFi": {
+      "type": "ls-newsletter",
+      "settings": {
+        "heading": "Be the first to know the latest drops!",
+        "heading_accent": "the latest drops!",
+        "subheading": "<p>Subscribe today and get <strong>10% OFF</strong> your first order + updates and offers.</p>",
+        "placeholder": "Email Address",
+        "button_text": "Subscribe",
+        "success_message": "Thanks for subscribing!",
+        "heading_font": "plus_jakarta_sans_n7",
+        "heading_font_size": 32,
+        "content_font": "inter_n4",
+        "content_font_size": 16,
+        "button_font": "inter_n7",
+        "button_font_size": 16,
+        "background_color": "{{ settings.color_palette.color1 }}",
+        "text_color": "#fffffb",
+        "accent_color": "#ffd82f",
+        "button_background": "{{ settings.color_palette.color3 }}",
+        "button_text_color": "{{ settings.color_palette.foreground }}",
+        "input_background": "#fffffb",
+        "input_border_color": "#87898b",
+        "placeholder_color": "#87898b",
+        "input_border_radius": 32,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
     "section",
-    "main"
+    "main",
+    "ls_features_kU9KqM",
+    "ls_newsletter_mypYFi"
   ]
 }
