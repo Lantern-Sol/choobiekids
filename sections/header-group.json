@@ -119,7 +119,7 @@
         "actions_font": "body",
         "actions_text_case": "none",
         "background_color_top": "{{ settings.color_palette.color2 }}",
-        "text_color_top": "",
+        "text_color_top": "{{ settings.color_palette.color4 }}",
         "background_color_bottom": "",
         "text_color_bottom": "",
         "bubble_style": "default",
