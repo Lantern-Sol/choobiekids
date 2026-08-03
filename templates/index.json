@@ -1260,72 +1260,6 @@
         "padding-inline-end-mobile": 0
       }
     },
-    "video_section": {
-      "type": "hero",
-      "blocks": {
-        "button_zbeKRw": {
-          "type": "button",
-          "name": "t:names.button",
-          "settings": {
-            "label": "Shop Choobies",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "{{ settings.color_palette.color3 }}",
-            "custom_button_text": "{{ settings.color_palette.foreground }}",
-            "custom_button_border": "{{ settings.color_palette.color3 }}",
-            "link_text_color": "",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "button_zbeKRw"
-      ],
-      "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/video-poster-1.webp",
-        "parallax_effect": false,
-        "hide_media_on_mobile": false,
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 24,
-        "use_mobile_gap": false,
-        "mobile_gap": 12,
-        "section_width": "full-width",
-        "section_width-mobile": "full-width",
-        "section_height": "custom",
-        "section_height_custom": 30,
-        "background_color": "",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 0,
-        "padding-block-end": 0,
-        "use_mobile_padding": false,
-        "padding-block-start-mobile": 0,
-        "padding-block-end-mobile": 0
-      }
-    },
     "features": {
       "type": "ls-features",
       "blocks": {
@@ -1484,7 +1418,6 @@
     "testimonials",
     "content_cards",
     "section_yeybCG",
-    "video_section",
     "features",
     "faq",
     "newsletter"
