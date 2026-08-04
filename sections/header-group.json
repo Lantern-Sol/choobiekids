@@ -71,7 +71,7 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "main-menu",
+            "menu": "main-menu-copy",
             "inherit_header_color_scheme": false,
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "",
