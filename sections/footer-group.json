@@ -103,6 +103,8 @@
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
                 "accent_text": "Made by parents.",
+                "accent_style": "typography",
+                "accent_color": "",
                 "accent_font_size": "1.375rem",
                 "enable_custom_font_weight": false,
                 "weight": "400",
@@ -321,7 +323,7 @@
         "section_width": "page-width",
         "gap": 24,
         "background_color": "{{ settings.color_palette.color2 }}",
-        "divider_thickness": 1,
+        "divider_thickness": 0,
         "divider_color": "",
         "padding-block-start": 12,
         "padding-block-end": 16
