@@ -917,7 +917,7 @@
         "feature_We6Rnf"
       ],
       "settings": {
-        "background_color": "#faf7f0",
+        "background_color": "{{ settings.color_palette.background }}",
         "padding_top": 48,
         "padding_bottom": 48
       }
