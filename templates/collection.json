@@ -463,10 +463,10 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                    "text": "<p>The ultimate barefoot shoe for growing feet. Easy to slip on, perfectly shaped for natural movement, and ready for all-day play. Choose your favorite color.</p>",
                     "mobile_text": "",
                     "width": "fit-content",
-                    "max_width": "normal",
+                    "max_width": "none",
                     "alignment": "left",
                     "alignment_mobile": "",
                     "height_mode": "auto",
