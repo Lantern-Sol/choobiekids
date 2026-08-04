@@ -705,6 +705,7 @@
         },
         "filters": {
           "type": "filters",
+          "disabled": true,
           "static": true,
           "settings": {
             "enable_filtering": true,
@@ -853,7 +854,7 @@
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "background_color": "",
-        "padding-block-start": 0,
+        "padding-block-start": 40,
         "padding-block-end": 32
       }
     },
