@@ -478,12 +478,16 @@
 
 <div
   id="Hero-{{ section.id }}"
-  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}{% if section.settings.mobile_aspect_ratio != blank and section.settings.mobile_aspect_ratio != 'inherit' %} hero--mobile-aspect{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
     --hero-border-opacity: {{ section.settings.border_opacity }}%;
     --blur-opacity: {{ section.settings.reflection_opacity | divided_by: 100.0 }};
+    --hero-media-position: {{ section.settings.media_position | default: 'center' }};
+    {% if section.settings.mobile_aspect_ratio != blank and section.settings.mobile_aspect_ratio != 'inherit' %}
+      --hero-aspect-ratio-mobile: {{ section.settings.mobile_aspect_ratio }};
+    {% endif %}
     {% if section.settings.section_height == 'custom' %}
       --hero-min-height: {{ section.settings.section_height_custom }}svh;
     {% elsif section.settings.section_height == "full-screen" %}
@@ -657,7 +661,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    object-position: center center;
+    object-position: var(--hero-media-position, center center);
     overflow: hidden;
     position: relative;
     z-index: var(--layer-base);
@@ -690,6 +694,25 @@
     .hero--stack-mobile .hero__media-grid {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(var(--hero-media-count-mobile, 1), calc(100% / var(--hero-media-count-mobile, 1)));
+    }
+  }
+
+  /* Mobile aspect ratio: phones only, so tablets keep the desktop hero. Applied to the container the media grid fills */
+  @media screen and (max-width: 600px) {
+    .hero--mobile-aspect {
+      min-height: 0;
+    }
+
+    .hero--mobile-aspect .hero__container {
+      min-height: 0;
+      aspect-ratio: var(--hero-aspect-ratio-mobile);
+    }
+  }
+
+  /* Tablet: automatically show a smaller (shorter) hero than desktop */
+  @media screen and (min-width: 601px) and (max-width: 989px) {
+    .hero {
+      min-height: calc((var(--hero-min-height) * 0.6) - var(--hero-height-offset));
     }
   }
 
@@ -1226,6 +1249,60 @@
       "default": 50,
       "unit": "%",
       "visible_if": "{{ section.settings.section_height == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "t:settings.media_position",
+      "info": "t:info.hero_media_position",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:options.top"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "bottom",
+          "label": "t:options.bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_aspect_ratio",
+      "label": "t:settings.mobile_aspect_ratio",
+      "info": "t:info.hero_mobile_aspect_ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "1 / 1",
+          "label": "t:options.ratio_1_1"
+        },
+        {
+          "value": "4 / 3",
+          "label": "t:options.ratio_4_3"
+        },
+        {
+          "value": "3 / 4",
+          "label": "t:options.ratio_3_4"
+        },
+        {
+          "value": "16 / 9",
+          "label": "t:options.ratio_16_9"
+        },
+        {
+          "value": "3 / 2",
+          "label": "t:options.ratio_3_2"
+        }
+      ],
+      "default": "inherit"
     },
     {
       "type": "header",

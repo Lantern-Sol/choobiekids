@@ -195,7 +195,24 @@
       "type": "text",
       "id": "accent_text",
       "label": "Accent text",
-      "info": "If this text appears in the text above, that portion is shown inline in the accent font."
+      "info": "If this text appears in the text above, that portion is styled inline as the accent font or accent color."
+    },
+    {
+      "type": "select",
+      "id": "accent_style",
+      "label": "Accent style",
+      "options": [
+        { "value": "typography", "label": "Typography (accent font)" },
+        { "value": "color", "label": "Color" }
+      ],
+      "default": "typography",
+      "visible_if": "{{ block.settings.accent_text != blank }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "visible_if": "{{ block.settings.accent_text != blank and block.settings.accent_style == 'color' }}"
     },
     {
       "type": "select",
@@ -212,7 +229,7 @@
         { "value": "2rem", "label": "32px" }
       ],
       "default": "1.375rem",
-      "visible_if": "{{ block.settings.accent_text != blank }}"
+      "visible_if": "{{ block.settings.accent_text != blank and block.settings.accent_style != 'color' }}"
     },
     {
       "type": "checkbox",

@@ -80,11 +80,23 @@
     }
 
     .footer-content[style*='--grid-columns: 4'] {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Logo group full-width on top, three menus in a row beneath */
+    .footer-content[style*='--grid-columns: 4'] > :first-child {
+      grid-column: 1 / -1;
     }
 
     .footer-content--isolated-grid-item-tablet > :last-child {
       grid-column: 1 / -1;
+    }
+
+    /* Use the merchant's mobile logo size here; 128px desktop is too big */
+    .footer-content .logo-block {
+      width: calc(
+        var(--logo-width-mobile, var(--logo-width)) + var(--padding-inline-start) + var(--padding-inline-end)
+      );
     }
   }
 

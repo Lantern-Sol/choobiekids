@@ -76,7 +76,13 @@
       {% endif %}
     {% endif %}
     {% if block_settings.accent_text != blank %}
-      --accent-font-size: {{ block_settings.accent_font_size | default: '1.375rem' }};
+      {% if block_settings.accent_style == 'color' %}
+        --accent-color: {{ block_settings.accent_color | default: 'inherit' }};
+      {% else %}
+        --accent-font-family: var(--font-accent--family);
+        --accent-font-size: {{ block_settings.accent_font_size | default: '1.375rem' }};
+        --accent-line-height: 1.2;
+      {% endif %}
     {% endif %}
     {% if block_settings.background %}
       --text-background-color: {{ block_settings.background_color | default: 'rgb(255 255 255 / 1.0)' }};
@@ -218,11 +224,12 @@
     height: var(--block-height);
   }
 
-  /* Accent text — a repeated portion of the text rendered inline in the accent font */
+  /* Accent text — a repeated portion of the text styled inline as either accent font or accent color */
   .text-block__accent {
-    font-family: var(--font-accent--family);
-    font-size: var(--accent-font-size, 1.375rem);
-    line-height: 1.2;
+    font-family: var(--accent-font-family, inherit);
+    font-size: var(--accent-font-size, inherit);
+    line-height: var(--accent-line-height, inherit);
+    color: var(--accent-color, inherit);
   }
 
   /* Mobile-only text alignment override */

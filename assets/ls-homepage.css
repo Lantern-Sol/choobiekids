@@ -822,6 +822,26 @@
   }
 }
 
+/* Tablet: keep two-column layout, scale text down proportionally, tighten padding */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .ls-newsletter {
+    --padding-block-start: 1.5rem; /* 24px (desktop 48px) */
+    --padding-block-end: 1.5rem;
+  }
+
+  .ls-newsletter__heading {
+    font-size: 1.625rem; /* 26px */
+  }
+
+  .ls-newsletter__subheading {
+    font-size: 0.9375rem; /* 15px */
+  }
+
+  .ls-newsletter__submit {
+    font-size: 0.9375rem; /* 15px */
+  }
+}
+
 /* ----------------------------------------------------------
    Editorial (Why Barefoot / The Pocket / The Research)
    ---------------------------------------------------------- */

@@ -68,6 +68,11 @@
             assign slot = 0
           -%}
 
+          {%- comment %} Emit featured card(s) first in the DOM so they win any order tie and lead the grid {% endcomment -%}
+          {%- if paginate.current_page == 1 -%}
+            {% content_for 'blocks' %}
+          {%- endif -%}
+
           {% for product in collection.products %}
             {%- assign slot = slot | plus: 1 -%}
             {%- if paginate.current_page == 1 -%}
@@ -96,10 +101,6 @@
               %}
             </li>
           {% endfor %}
-
-          {%- if paginate.current_page == 1 -%}
-            {% content_for 'blocks' %}
-          {%- endif -%}
         {% endcapture %}
 
         {% render 'product-grid',

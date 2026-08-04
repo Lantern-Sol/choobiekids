@@ -2653,5 +2653,30 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Footer decoration",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "footer_show_decor",
+        "label": "t:settings.activate_decorative_elements",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "footer_blob_color_1",
+        "label": "t:settings.blob_color_1",
+        "default": "#ffd82f",
+        "visible_if": "{{ settings.footer_show_decor }}"
+      },
+      {
+        "type": "color",
+        "id": "footer_blob_color_2",
+        "label": "t:settings.blob_color_2",
+        "default": "#ff6b5a",
+        "visible_if": "{{ settings.footer_show_decor }}"
+      }
+    ]
   }
 ]
