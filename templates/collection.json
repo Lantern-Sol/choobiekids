@@ -773,7 +773,7 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
-                "image_ratio": "square",
+                "image_ratio": "tall",
                 "show_hover_label": false,
                 "show_overlay_quick_add": true,
                 "border": "none",
