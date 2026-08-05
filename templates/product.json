@@ -672,7 +672,7 @@
                     "width-mobile": 22,
                     "link": "",
                     "open_in_new_tab": false,
-                    "icon_color": "{{ settings.color_palette.foreground }}"
+                    "icon_color": "{{ settings.color_palette.color1 }}"
                   },
                   "blocks": {}
                 },
