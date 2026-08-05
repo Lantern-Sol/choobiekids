@@ -1,0 +1,23 @@
+{% liquid
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+%}
+
+{%- if product -%}
+  {% render 'sibling-color-switcher', product: product, block: block %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Color switcher",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Color switcher"
+    }
+  ]
+}
+{% endschema %}

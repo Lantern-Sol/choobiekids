@@ -1,0 +1,106 @@
+{%- doc -%}
+  Renders a color switcher for a custom "combined listing": a group of sibling
+  products (one per color) linked through the `custom.product_group` metaobject.
+  Each sibling links to its own product page; the current product is shown selected.
+
+  Color is expressed by product identity (one product per color), NOT by a variant
+  option — so Size stays the only native variant inside each product and nothing is
+  duplicated in the variant picker. The color name comes from the `custom.color_label`
+  metafield (falling back to the product title) and the chip is the product's featured image.
+
+  @param {object} product - The current product object.
+  @param {object} [block] - The block object, for theme editor attributes.
+
+  @example
+  {% render 'sibling-color-switcher', product: product, block: block %}
+{%- enddoc -%}
+
+{% liquid
+  assign siblings = product.metafields.custom.product_group.value.products.value
+%}
+
+{%- if siblings and siblings.count > 1 -%}
+  <div class="sibling-color-switcher" {{ block.shopify_attributes }}>
+    <span class="sibling-color-switcher__legend">{{ 'products.sibling_color_switcher.label' | t }}</span>
+    <ul class="sibling-color-switcher__list" role="list">
+      {%- for sibling in siblings -%}
+        {%- liquid
+          assign color_label = sibling.metafields.custom.color_label | default: sibling.title
+          assign chip_image = sibling.featured_image
+        -%}
+        <li class="sibling-color-switcher__item">
+          {%- if sibling.id == product.id -%}
+            <span
+              class="sibling-color-switcher__swatch is-selected"
+              aria-current="true"
+              title="{{ color_label | escape }}"
+            >
+              {%- if chip_image -%}
+                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: color_label }}
+              {%- else -%}
+                <span class="visually-hidden">{{ color_label }}</span>
+              {%- endif -%}
+            </span>
+          {%- else -%}
+            <a
+              class="sibling-color-switcher__swatch"
+              href="{{ sibling.url }}"
+              title="{{ color_label | escape }}"
+            >
+              {%- if chip_image -%}
+                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: color_label }}
+              {%- else -%}
+                <span class="visually-hidden">{{ color_label }}</span>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .sibling-color-switcher {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sibling-color-switcher__legend {
+    font-size: 0.875rem;
+  }
+
+  .sibling-color-switcher__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sibling-color-switcher__swatch {
+    display: inline-flex;
+    border-radius: 50%;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    transition: outline-color 0.1s ease;
+  }
+
+  .sibling-color-switcher__swatch:hover {
+    outline-color: rgb(var(--color-foreground-rgb) / 0.4);
+  }
+
+  .sibling-color-switcher__swatch.is-selected {
+    outline-color: rgb(var(--color-foreground-rgb));
+  }
+
+  .sibling-color-switcher__img {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+{% endstylesheet %}
