@@ -14,11 +14,27 @@
   assign image_sizes = '(min-width: 750px) 50vw, 100vw'
 
   # Check if product has badges and determine position
+  # (mirrors the badge logic in blocks/_product-card-gallery.liquid:
+  #  sold out = whole product unavailable; else pre-order (any continue-selling
+  #  variant at <=0) or a variant-level discount reserves badge space)
   assign has_badges = false
   assign badge_position = null
   if product != blank
-    if product.available == false or product.compare_at_price > product.price
+    if product.available == false
       assign has_badges = true
+    else
+      for badge_variant in product.variants
+        if badge_variant.compare_at_price > badge_variant.price and badge_variant.compare_at_price > 0
+          assign has_badges = true
+          break
+        endif
+        if badge_variant.inventory_management != blank and badge_variant.inventory_quantity <= 0 and badge_variant.inventory_policy == 'continue'
+          assign has_badges = true
+          break
+        endif
+      endfor
+    endif
+    if has_badges
       assign badge_position = settings.badge_position
     endif
   endif

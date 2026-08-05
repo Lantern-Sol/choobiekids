@@ -11,6 +11,16 @@
 
     position: absolute;
     z-index: var(--layer-flat);
+
+    /* Stack multiple badges (e.g. Pre-order + discount) at the anchored corner */
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-2xs, 0.4rem);
+    align-items: flex-start;
+  }
+
+  .product-badges--top-right {
+    align-items: flex-end;
   }
 
   .product-badges--bottom-left {
@@ -29,18 +39,16 @@
   }
 
   .product-badges__badge {
-    --badge-font-size: var(--font-size--xs);
-
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: var(--color-foreground);
     background: var(--color-background);
-    font-size: var(--badge-font-size);
-    font-family: var(--badge-font-family);
-    font-weight: var(--badge-font-weight);
-    text-transform: var(--badge-text-transform);
+    font-size: var(--badge-font-size, var(--font-size--xs));
+    font-family: var(--badge-font-family, var(--font-body--family));
+    font-weight: var(--badge-font-weight, var(--font-body--weight));
+    text-transform: var(--badge-text-transform, none);
     border-radius: var(--badge-border-radius);
   }
 

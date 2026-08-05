@@ -17,6 +17,44 @@
   if block.settings.show_hover_label and hover_tagline != blank
     assign show_hover_panel = true
   endif
+
+  # ---- Badge state (availability + discount) ----
+  assign badge_is_soldout = false
+  assign badge_is_preorder = false
+  assign badge_disc_min = null
+  assign badge_disc_max = null
+  if product != blank
+    if product.available == false
+      assign badge_is_soldout = true
+    else
+      for badge_variant in product.variants
+        if badge_variant.inventory_management != blank and badge_variant.inventory_quantity <= 0 and badge_variant.inventory_policy == 'continue'
+          assign badge_is_preorder = true
+          break
+        endif
+      endfor
+    endif
+
+    # Discount % across ALL purchasable variants (a non-sale variant counts as 0%),
+    # so the "N% OFF" label only shows when every buyable variant shares the same
+    # discount; otherwise (some sizes not discounted, or different %s) -> "Sale".
+    unless badge_is_soldout
+      for badge_variant in product.variants
+        if badge_variant.available
+          assign badge_pct = 0
+          if badge_variant.compare_at_price > badge_variant.price and badge_variant.compare_at_price > 0
+            assign badge_pct = badge_variant.compare_at_price | minus: badge_variant.price | times: 100.0 | divided_by: badge_variant.compare_at_price | round
+          endif
+          if badge_disc_min == null or badge_pct < badge_disc_min
+            assign badge_disc_min = badge_pct
+          endif
+          if badge_disc_max == null or badge_pct > badge_disc_max
+            assign badge_disc_max = badge_pct
+          endif
+        endif
+      endfor
+    endunless
+  endif
 %}
 
 {% capture children %}
@@ -39,19 +77,23 @@
       class="product-badges product-badges--{{ settings.badge_position }}"
       style="
         --badge-border-radius: {{ settings.badge_corner_radius }}px;
-        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-text-transform: {{ settings.badge_text_transform }};
+        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-font-size: {{ settings.badge_font_size }}px; --badge-text-transform: {{ settings.badge_text_transform }};
       "
     >
-      {%- if product.available == false or product.compare_at_price > product.price -%}
-        <div
-          class="
-            product-badges__badge product-badges__badge--rectangle
-            {% if product.available == false %} color-custom-badge-sold-out{% elsif product.compare_at_price > product.price %} color-custom-badge-sale{% endif %}
-          "
-        >
-          {%- if product.available == false -%}
-            {{ 'content.product_badge_sold_out' | t }}
-          {%- elsif product.compare_at_price > product.price -%}
+      {%- if badge_is_preorder -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-preorder">
+          {{ 'content.product_badge_preorder' | t }}
+        </div>
+      {%- endif -%}
+      {%- if badge_is_soldout -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-sold-out">
+          {{ 'content.product_badge_sold_out' | t }}
+        </div>
+      {%- elsif badge_disc_max > 0 -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-sale">
+          {%- if badge_disc_min == badge_disc_max -%}
+            {{ 'content.product_badge_percent_off' | t: percent: badge_disc_max }}
+          {%- else -%}
             {{ 'content.product_badge_sale' | t }}
           {%- endif -%}
         </div>

@@ -45,6 +45,9 @@
       --color: {{ block_settings.text_color }};
       --color-rgb: {{ block_settings.text_color.rgb }};
     {% endif %}
+    {% if block_settings.compare_at_color != blank %}
+      --compare-at-price-color: {{ block_settings.compare_at_color }};
+    {% endif %}
     --width: {{ block_settings.width }};
   "
   {{ block.shopify_attributes }}
@@ -361,6 +364,13 @@
       "type": "color",
       "id": "text_color",
       "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "compare_at_color",
+      "label": "Compare-at price color",
+      "info": "Color for the crossed-out original price on sale items. Leave empty to use the default muted color.",
       "placeholder": "t:settings.default"
     },
     {

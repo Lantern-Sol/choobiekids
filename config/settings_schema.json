@@ -1431,6 +1431,18 @@
         "default": "{{ settings.color_palette.foreground }}"
       },
       {
+        "type": "color",
+        "id": "badge_preorder_background_color",
+        "label": "Pre-order badge background",
+        "default": "{{ settings.color_palette.color3 }}"
+      },
+      {
+        "type": "color",
+        "id": "badge_preorder_text_color",
+        "label": "Pre-order badge text",
+        "default": "{{ settings.color_palette.foreground }}"
+      },
+      {
         "type": "header",
         "content": "t:names.typography"
       },
@@ -1473,6 +1485,16 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "range",
+        "id": "badge_font_size",
+        "min": 10,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Badge font size",
+        "default": 12
       }
     ]
   },
