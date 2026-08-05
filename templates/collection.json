@@ -837,7 +837,7 @@
                 "type_preset_mobile": "",
                 "mobile_font_size": "1rem",
                 "mobile_custom_line_height": 1.5,
-                "padding-block-start": 0,
+                "padding-block-start": 10,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0,
