@@ -1,0 +1,243 @@
+{% comment %}
+  Quote block — accent-line callout (matches Figma PDP accordion "quote", node 9675:4185).
+  A short quote / note / disclaimer with a coral accent line on one side.
+  Renders as a semantic <blockquote>. Usable anywhere @theme blocks are accepted
+  (e.g. inside an accordion row's content).
+{% endcomment %}
+
+{% assign block_settings = block.settings %}
+
+<blockquote
+  class="quote-block quote-block--{{ block.id }} quote-block--accent-{{ block_settings.accent_side }} spacing-style"
+  style="
+    --quote-border-width: {{ block_settings.border_width }}px;
+    {% if block_settings.border_color != blank %}--quote-border-color: {{ block_settings.border_color }};{% endif %}
+    {% if block_settings.text_color != blank %}--quote-text-color: {{ block_settings.text_color }};{% endif %}
+    {% if block_settings.font_size != blank %}--quote-font-size: {{ block_settings.font_size }};{% endif %}
+    {% render 'spacing-style', settings: block_settings %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="quote-block__content">
+    {{ block_settings.text }}
+  </div>
+</blockquote>
+
+{% stylesheet %}
+  /* Outer element carries the merchant padding (spacing-style); the accent line
+     lives on the inner content so padding never stretches or crosses the line. */
+  .quote-block {
+    margin: 0;
+  }
+
+  .quote-block__content {
+    font-family: var(--font-body--family);
+    font-size: var(--quote-font-size, 0.875rem);
+    line-height: 1.2;
+    color: var(--quote-text-color, inherit);
+    border: 0 solid var(--quote-border-color, #ff6b5a);
+  }
+
+  /* Fixed gap between the accent line and the text (matches Figma's 16px). */
+  .quote-block--accent-left .quote-block__content {
+    border-left-width: var(--quote-border-width, 2px);
+    padding-inline-start: 1rem;
+  }
+
+  .quote-block--accent-right .quote-block__content {
+    border-right-width: var(--quote-border-width, 2px);
+    padding-inline-end: 1rem;
+  }
+
+  .quote-block__content > :first-child {
+    margin-block-start: 0;
+  }
+
+  .quote-block__content > :last-child {
+    margin-block-end: 0;
+  }
+
+  .quote-block a {
+    color: inherit;
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.quote",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:settings.text"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "select",
+      "id": "accent_side",
+      "label": "t:settings.accent_side",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.left"
+        },
+        {
+          "value": "right",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.thickness",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.color",
+      "default": "#ff6b5a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        { "value": "0.75rem", "label": "12px" },
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem", "label": "16px" },
+        { "value": "1.125rem", "label": "18px" }
+      ],
+      "default": "0.875rem"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.mobile_padding"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_mobile_padding",
+      "label": "t:settings.use_mobile_padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start-mobile",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.use_mobile_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end-mobile",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.use_mobile_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start-mobile",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.use_mobile_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end-mobile",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.use_mobile_padding }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.quote",
+      "category": "t:categories.basic",
+      "settings": {
+        "text": "t:html_defaults.quote_placeholder"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -9,12 +9,22 @@
 <div
   class="accordion accordion--{{ block.id }} accordion--{{ block_settings.icon }} border-style spacing-style{% if block_settings.background_color != blank or block_settings.text_color != blank %} color-custom-{{ block.id }}{% endif %}{% if block_settings.background_color != blank %} accordion--custom-background{% endif %}{% if block_settings.dividers %} accordion--dividers{% endif %}"
   style="
-    --summary-font-family: var(--font-{{ block_settings.type_preset }}--family);
-     --summary-font-style: var(--font-{{ block_settings.type_preset }}--style);
-     --summary-font-weight: bold;
-     --summary-font-size: var(--font-{{ block_settings.type_preset }}--size);
-     --summary-font-line-height: var(--font-{{ block_settings.type_preset }}--line-height);
-     --summary-font-case: var(--font-{{ block_settings.type_preset }}--case);
+    {% if block_settings.type_preset == 'custom' %}
+      --summary-font-family: {{ block_settings.font }};
+       --summary-font-style: {{ block_settings.font | replace: 'family', 'style' }};
+       --summary-font-weight: {% if block_settings.enable_custom_font_weight and block_settings.weight != blank %}{{ block_settings.weight }}{% else %}{{ block_settings.font | replace: 'family', 'weight' }}{% endif %};
+       --summary-font-size: {{ block_settings.font_size }};
+       --summary-font-line-height: {% if block_settings.line_height == 'custom' %}{{ block_settings.custom_line_height }}{% else %}var(--line-height--heading-{{ block_settings.line_height }}){% endif %};
+       --summary-font-letter-spacing: var(--letter-spacing--heading-{{ block_settings.letter_spacing }});
+       --summary-font-case: {{ block_settings.case }};
+    {% else %}
+      --summary-font-family: var(--font-{{ block_settings.type_preset }}--family);
+       --summary-font-style: var(--font-{{ block_settings.type_preset }}--style);
+       --summary-font-weight: bold;
+       --summary-font-size: var(--font-{{ block_settings.type_preset }}--size);
+       --summary-font-line-height: var(--font-{{ block_settings.type_preset }}--line-height);
+       --summary-font-case: var(--font-{{ block_settings.type_preset }}--case);
+    {% endif %}
     {% render 'spacing-style', settings: block_settings %}
     {% render 'border-override', settings: block_settings %}
     {% if block_settings.divider_color != blank %} --color-border: {{ block_settings.divider_color }};{% endif %}
@@ -102,10 +112,129 @@
         {
           "value": "h6",
           "label": "t:options.h6"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
         }
       ],
       "default": "h6",
       "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-heading--family)",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_font_weight",
+      "label": "Custom font weight",
+      "default": false,
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "Weight",
+      "options": [
+        { "value": "100", "label": "Thin" },
+        { "value": "200", "label": "Extra Light" },
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700",
+      "visible_if": "{{ block.settings.type_preset == 'custom' and block.settings.enable_custom_font_weight }}"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        { "value": "0.75rem", "label": "12px" },
+        { "value": "0.875rem", "label": "14px" },
+        { "value": "1rem", "label": "16px" },
+        { "value": "1.125rem", "label": "18px" },
+        { "value": "1.25rem", "label": "20px" },
+        { "value": "1.5rem", "label": "24px" },
+        { "value": "1.875rem", "label": "30px" },
+        { "value": "2rem", "label": "32px" },
+        { "value": "2.5rem", "label": "40px" },
+        { "value": "3rem", "label": "48px" }
+      ],
+      "default": "1.25rem",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "line_height",
+      "label": "t:settings.line_height",
+      "options": [
+        { "value": "tight", "label": "t:options.tight" },
+        { "value": "normal", "label": "t:options.normal" },
+        { "value": "loose", "label": "t:options.loose" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "tight",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "custom_line_height",
+      "label": "Line height value",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.2,
+      "visible_if": "{{ block.settings.type_preset == 'custom' and block.settings.line_height == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        { "value": "tight", "label": "t:options.tight" },
+        { "value": "normal", "label": "t:options.normal" },
+        { "value": "loose", "label": "t:options.loose" }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        { "value": "none", "label": "t:options.default" },
+        { "value": "uppercase", "label": "t:options.uppercase" }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
     },
     {
       "type": "header",

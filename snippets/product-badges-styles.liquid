@@ -23,6 +23,59 @@
     align-items: flex-end;
   }
 
+  /* Inline variant (e.g. product page): flows in normal layout instead of
+     absolutely positioned over media. */
+  .product-badges--inline {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: var(--badge-inline-justify, flex-start);
+  }
+
+  /* Inline badge host (product page block). Collapses only when the product has
+     no badge on ANY variant (truly empty). When some variants have a badge, the
+     block renders an invisible placeholder for no-badge variants (below) so the
+     host keeps its height and nothing shifts on variant change. */
+  product-badge {
+    display: block;
+  }
+
+  product-badge:empty {
+    display: none;
+  }
+
+  /* Invisible height-reserving placeholder: occupies the exact badge height. */
+  .product-badges--placeholder {
+    visibility: hidden;
+  }
+
+  .product-badges--placeholder .product-badges__badge {
+    animation: none;
+  }
+
+  /* Smooth the badge in when it (re)renders on variant change. Freshly inserted
+     nodes replay this each swap; the JS skips the swap when unchanged. */
+  @keyframes badge-inline-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .product-badges--inline .product-badges__badge {
+    animation: badge-inline-in 130ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-badges--inline .product-badges__badge {
+      animation: none;
+    }
+  }
+
   .product-badges--bottom-left {
     bottom: calc(var(--badge-inset) + var(--padding-block-start));
     left: calc(var(--badge-inset) + var(--padding-inline-start));

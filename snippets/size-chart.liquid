@@ -1,0 +1,121 @@
+{%- doc -%}
+  Renders the Choobie size chart content from a `size_chart` metaobject entry:
+  an optional heading + table (only when `rows` has content) and/or an optional
+  video.
+
+  There is NO built-in fallback. If the entry has neither table rows nor a video,
+  this renders nothing.
+
+  Metaobject fields (all optional):
+    - heading    single line text
+    - columns    list.single line text  -> table header cells
+    - rows       multi-line text        -> one row per line, cells separated by "|"
+    - video      file reference (video) -> Shopify-hosted video (takes precedence)
+    - video_url  url                    -> YouTube/Vimeo, used only if `video` is empty
+
+  @param {object} [chart] - A `size_chart` metaobject entry (or nil).
+
+  @example
+  {% render 'size-chart', chart: product.metafields.custom.size_chart.value %}
+{%- enddoc -%}
+
+{%- liquid
+  assign heading = chart.heading.value | default: 'Size Chart'
+  assign columns = chart.columns.value
+  assign rows_raw = chart.rows.value
+  assign video_file = chart.video.value
+  assign video_url = chart.video_url.value
+
+  assign has_rows = false
+  if rows_raw != blank
+    assign has_rows = true
+  endif
+
+  assign has_video = false
+  if video_file != blank or video_url != blank
+    assign has_video = true
+  endif
+
+  # Extract a YouTube / Vimeo id from the provided url, if any.
+  assign yt_id = ''
+  assign vimeo_id = ''
+  if video_url != blank
+    if video_url contains 'youtu'
+      if video_url contains 'watch?v='
+        assign yt_id = video_url | split: 'watch?v=' | last | split: '&' | first
+      elsif video_url contains 'youtu.be/'
+        assign yt_id = video_url | split: 'youtu.be/' | last | split: '?' | first
+      elsif video_url contains '/embed/'
+        assign yt_id = video_url | split: '/embed/' | last | split: '?' | first
+      elsif video_url contains '/shorts/'
+        assign yt_id = video_url | split: '/shorts/' | last | split: '?' | first
+      endif
+    elsif video_url contains 'vimeo.com/'
+      assign vimeo_id = video_url | split: 'vimeo.com/' | last | split: '?' | first | split: '/' | last
+    endif
+  endif
+-%}
+
+{%- if has_rows or has_video -%}
+  <div class="ck-size-chart{% unless has_rows %} ck-size-chart--video-only{% endunless %}">
+    {%- if has_rows -%}
+      {%- if heading != blank -%}
+        <h3 class="ck-size-chart__title">{{ heading }}</h3>
+      {%- endif -%}
+
+      {%- assign row_lines = rows_raw | strip | newline_to_br | strip_newlines | split: '<br />' -%}
+      <div class="ck-size-chart__scroll">
+        <table class="ck-size-chart__table">
+          {%- if columns != blank -%}
+            <thead>
+              <tr>
+                {%- for column in columns -%}
+                  <th scope="col">{{ column | strip }}</th>
+                {%- endfor -%}
+              </tr>
+            </thead>
+          {%- endif -%}
+          <tbody>
+            {%- for line in row_lines -%}
+              {%- assign line = line | strip -%}
+              {%- if line != blank -%}
+                {%- assign cells = line | split: '|' -%}
+                <tr>
+                  {%- for cell in cells -%}
+                    <td>{{ cell | strip }}</td>
+                  {%- endfor -%}
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    {%- endif -%}
+
+    {%- if has_video -%}
+      <div class="ck-size-chart__video">
+        {%- if video_file != blank -%}
+          {{ video_file | video_tag: image_size: '1100x', controls: true, preload: 'none', loop: false }}
+        {%- elsif yt_id != blank -%}
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/{{ yt_id }}"
+            title="{{ heading | escape }}"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        {%- elsif vimeo_id != blank -%}
+          <iframe
+            src="https://player.vimeo.com/video/{{ vimeo_id }}"
+            title="{{ heading | escape }}"
+            loading="lazy"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        {%- else -%}
+          <a class="ck-size-chart__video-link" href="{{ video_url }}" target="_blank" rel="noopener">{{ video_url }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

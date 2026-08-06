@@ -1,0 +1,400 @@
+{%- liquid
+  assign bs = block.settings
+
+  # Resolve the chart, in priority order:
+  #   1. per-product override -> product metafield `custom.size_chart`
+  #   2. store default        -> the `size_chart` metaobject entry with `is_default` ticked
+  #   3. nil                  -> the snippet renders the built-in default chart
+  assign chart = nil
+  assign product_chart = product.metafields.custom.size_chart.value
+  if product_chart != blank
+    assign chart = product_chart
+  else
+    for entry in shop.metaobjects.size_chart.values
+      if entry.is_default.value
+        assign chart = entry
+        break
+      endif
+    endfor
+  endif
+
+  assign panel_id = 'ck-size-guide-panel-' | append: block.id
+
+  # No built-in fallback: hide the whole size guide when the resolved chart has
+  # neither table rows nor a video.
+  assign has_content = false
+  if chart.rows.value != blank or chart.video.value != blank or chart.video_url.value != blank
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content -%}
+<size-guide
+  class="ck-size-guide spacing-style"
+  style="
+    {% if bs.panel_background != blank %}--ck-sg-bg: {{ bs.panel_background }};{% endif %}
+    {% if bs.border_color != blank %}--ck-sg-border: {{ bs.border_color }};{% endif %}
+    {% if bs.stripe_color != blank %}--ck-sg-stripe: {{ bs.stripe_color }};{% endif %}
+    {% if bs.text_color != blank %}--ck-sg-text: {{ bs.text_color }};{% endif %}
+    {% if bs.toggle_color != blank %}--ck-sg-toggle-color: {{ bs.toggle_color }};{% endif %}
+    --ck-sg-radius: {{ bs.border_radius | divided_by: 16.0 }}rem;
+    {% render 'spacing-style', settings: bs %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="ck-size-guide__row">
+    {%- if bs.prompt_text != blank -%}
+      <span class="ck-size-guide__prompt">{{ bs.prompt_text }}</span>
+    {%- endif -%}
+
+    <button
+      type="button"
+      class="ck-size-guide__toggle"
+      aria-expanded="{% if bs.open_by_default %}true{% else %}false{% endif %}"
+      aria-controls="{{ panel_id }}"
+    >
+      <span class="ck-size-guide__toggle-label">{{ bs.toggle_label }}</span>
+      <span class="ck-size-guide__chevron svg-wrapper" aria-hidden="true">
+        <svg viewBox="0 0 6.5625 11.7188" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.71875 0L0 0.71875L5.14062 5.85938L0 11L0.71875 11.7188L6.21875 6.21875L6.5625 5.85938L6.21875 5.5L0.71875 0Z" fill="currentColor"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <div
+    id="{{ panel_id }}"
+    class="ck-size-guide__panel{% if bs.open_by_default %} is-open{% endif %}"
+    {% unless bs.open_by_default %}inert{% endunless %}
+  >
+    <div class="ck-size-guide__inner">
+      {% render 'size-chart', chart: chart %}
+    </div>
+  </div>
+</size-guide>
+
+<script src="{{ 'size-guide.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ck-size-guide {
+    display: block;
+    /* Fill the product-information column: the parent group is a flex column
+       aligned to flex-start, which would otherwise shrink this to content width. */
+    width: 100%;
+    font-family: var(--font-body--family);
+    color: var(--ck-sg-text, var(--color-foreground));
+  }
+
+  .ck-size-guide__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    font-size: 0.9375rem;
+  }
+
+  .ck-size-guide__prompt {
+    color: inherit;
+  }
+
+  .ck-size-guide__toggle {
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ck-sg-toggle-color, inherit);
+    cursor: pointer;
+  }
+
+  .ck-size-guide__toggle:focus-visible {
+    outline: var(--focus-outline-width, 2px) solid currentColor;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .ck-size-guide__chevron {
+    display: inline-flex;
+    width: 0.4375rem;
+    transition: transform 0.25s var(--animation-easing, ease);
+  }
+
+  .ck-size-guide__chevron svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .ck-size-guide__toggle[aria-expanded='true'] .ck-size-guide__chevron {
+    transform: rotate(90deg);
+  }
+
+  /* Collapsible panel — animates to true content height via grid rows,
+     so a video or extra rows never get clipped. */
+  .ck-size-guide__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin-top: 0;
+    opacity: 0;
+    transition: grid-template-rows 0.35s var(--animation-easing, ease),
+      opacity 0.25s var(--animation-easing, ease),
+      margin-top 0.35s var(--animation-easing, ease);
+  }
+
+  .ck-size-guide__panel.is-open {
+    grid-template-rows: 1fr;
+    margin-top: 1rem;
+    opacity: 1;
+  }
+
+  .ck-size-guide__inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Chart card */
+  .ck-size-chart {
+    background: var(--ck-sg-bg, var(--color-background, #fffffb));
+    border: 0.0625rem solid var(--ck-sg-border, #e1ded8);
+    border-radius: var(--ck-sg-radius, 0.875rem);
+    padding: 1.25rem;
+    color: inherit;
+  }
+
+  .ck-size-chart__title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin: 0 0 0.875rem;
+  }
+
+  .ck-size-chart__scroll {
+    overflow-x: auto;
+  }
+
+  .ck-size-chart__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.2;
+  }
+
+  .ck-size-chart__table th {
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    padding: 0.625rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .ck-size-chart__table td {
+    padding: 0.625rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .ck-size-chart__table th:first-child,
+  .ck-size-chart__table td:first-child {
+    text-align: left;
+  }
+
+  .ck-size-chart__table tbody tr:nth-child(odd) {
+    background: var(--ck-sg-stripe, #edf0ee);
+  }
+
+  .ck-size-chart__video {
+    margin-top: 1rem;
+  }
+
+  /* Video-only (no table): no preceding content, so no top gap. */
+  .ck-size-chart--video-only .ck-size-chart__video {
+    margin-top: 0;
+  }
+
+  .ck-size-chart__video iframe,
+  .ck-size-chart__video video,
+  .ck-size-chart__video media-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  /* Mobile: fit all five columns without horizontal scrolling by wrapping the
+     header labels onto two lines (matching the mobile design) and tightening
+     the type + cell padding. Data cells stay on a single line. */
+  @media screen and (max-width: 749px) {
+    .ck-size-chart {
+      padding: 1rem;
+    }
+
+    .ck-size-chart__title {
+      font-size: 1.125rem;
+    }
+
+    .ck-size-chart__table {
+      font-size: 0.75rem;
+    }
+
+    .ck-size-chart__table th,
+    .ck-size-chart__table td {
+      padding: 0.5rem 0.375rem;
+    }
+
+    .ck-size-chart__table th {
+      white-space: normal;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ck-size-guide__panel,
+    .ck-size-guide__chevron {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Size guide",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Content comes from a Size chart metaobject entry (see setup notes): a product’s own “Size chart” metafield wins; otherwise the entry marked “Use as store default”. If the entry has no table rows and no video, the whole size guide is hidden."
+    },
+    {
+      "type": "text",
+      "id": "prompt_text",
+      "label": "Prompt text",
+      "default": "Not sure of the size?"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label",
+      "label": "Toggle label",
+      "default": "Size guide"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Chart content"
+    },
+    {
+      "type": "paragraph",
+      "content": "Content is managed in Content → Metaobjects → Size chart."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "panel_background",
+      "label": "Panel background",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "stripe_color",
+      "label": "Row stripe color",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "toggle_color",
+      "label": "Link color",
+      "placeholder": "Default"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size guide",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

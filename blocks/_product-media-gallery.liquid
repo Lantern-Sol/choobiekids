@@ -279,7 +279,7 @@
       {% if block_settings.media_columns == "two" and block_settings.large_first_image%}media-gallery--large-first-image{% endif %}
     {% endif %}
     media-gallery--{{ block_settings.media_presentation }}
-    {% if block_settings.slideshow_mobile_controls_style == 'hint' %}
+    {% if block_settings.slideshow_mobile_controls_style == 'hint' or block_settings.mobile_peek %}
       media-gallery--hint
     {% endif %}
     {% if block_settings.extend_media %}
@@ -759,6 +759,14 @@
       "label": "t:settings.full_width_first_image",
       "default": false,
       "visible_if": "{{ block.settings.media_presentation == 'grid' and block.settings.media_columns == 'two' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_peek",
+      "label": "Show next image peek on mobile",
+      "info": "Reveals a sliver of the next image so shoppers know they can swipe. Keeps the pagination dots.",
+      "default": false,
+      "visible_if": "{{ block.settings.media_presentation == 'grid' }}"
     },
     {
       "type": "header",

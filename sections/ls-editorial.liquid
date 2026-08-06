@@ -15,6 +15,17 @@
   #shopify-section-{{ section.id }} .ls-editorial__image {
     --editorial-image-radius: {{ section.settings.image_border_radius }}px;
   }
+  #shopify-section-{{ section.id }} .ls-editorial__grid {
+    --editorial-column-gap: {{ section.settings.content_image_gap }}px;
+  }
+  #shopify-section-{{ section.id }} .ls-editorial__heading-break {
+    display: {% if section.settings.wrap_heading_accent_mobile %}inline{% else %}none{% endif %};
+  }
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .ls-editorial__heading-break {
+      display: {% if section.settings.wrap_heading_accent %}inline{% else %}none{% endif %};
+    }
+  }
 {%- endstyle -%}
 
 <div class="ls-editorial section" style="padding-block-start: var(--padding-block-start); padding-block-end: var(--padding-block-end);">
@@ -57,7 +68,7 @@
           <h2 class="ls-editorial__heading">
             {{ section.settings.heading_line_1 }}
             {% if section.settings.heading_line_2 != blank %}
-              <br><span class="ls-editorial__heading-accent">{{ section.settings.heading_line_2 }}</span>
+              <br class="ls-editorial__heading-break"><span class="ls-editorial__heading-accent">{{ section.settings.heading_line_2 }}</span>
             {% endif %}
           </h2>
         {% endif %}
@@ -68,13 +79,25 @@
           </div>
         {% endif %}
 
-        {% if section.settings.spec_text != blank or section.settings.spec_text_2 != blank %}
+        {% if section.settings.body_mobile != blank %}
+          <div class="ls-editorial__body-mobile rte">
+            {{ section.settings.body_mobile }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.spec_text != blank or section.settings.spec_text_2 != blank or section.settings.spec_text_3 != blank or section.settings.spec_text_4 != blank %}
           <div class="ls-editorial__specs">
             {% if section.settings.spec_text != blank %}
               <div class="ls-editorial__spec rte">{{ section.settings.spec_text }}</div>
             {% endif %}
             {% if section.settings.spec_text_2 != blank %}
               <div class="ls-editorial__spec rte">{{ section.settings.spec_text_2 }}</div>
+            {% endif %}
+            {% if section.settings.spec_text_3 != blank %}
+              <div class="ls-editorial__spec rte">{{ section.settings.spec_text_3 }}</div>
+            {% endif %}
+            {% if section.settings.spec_text_4 != blank %}
+              <div class="ls-editorial__spec rte">{{ section.settings.spec_text_4 }}</div>
             {% endif %}
           </div>
         {% endif %}
@@ -128,6 +151,20 @@
       "info": "Displayed in the accent color set below"
     },
     {
+      "type": "checkbox",
+      "id": "wrap_heading_accent",
+      "label": "Wrap accent to its own line (desktop)",
+      "default": true,
+      "info": "When off, heading line 2 stays inline with heading line 1 instead of breaking onto a new line"
+    },
+    {
+      "type": "checkbox",
+      "id": "wrap_heading_accent_mobile",
+      "label": "Wrap accent to its own line (mobile)",
+      "default": true,
+      "info": "Controls the line break on mobile independently of desktop"
+    },
+    {
       "type": "color",
       "id": "accent_color",
       "label": "Accent color",
@@ -141,6 +178,11 @@
     },
     {
       "type": "richtext",
+      "id": "body_mobile",
+      "label": "Body text (mobile only)"
+    },
+    {
+      "type": "richtext",
       "id": "spec_text",
       "label": "Spec / citation 1",
       "info": "Displayed with a coral left border"
@@ -150,6 +192,18 @@
       "id": "spec_text_2",
       "label": "Spec / citation 2",
       "info": "Optional second citation with coral left border"
+    },
+    {
+      "type": "richtext",
+      "id": "spec_text_3",
+      "label": "Spec / citation 3",
+      "info": "Optional third citation with coral left border"
+    },
+    {
+      "type": "richtext",
+      "id": "spec_text_4",
+      "label": "Spec / citation 4",
+      "info": "Optional fourth citation with coral left border"
     },
     {
       "type": "image_picker",
@@ -182,6 +236,16 @@
       "label": "Extend image to screen edge",
       "default": false,
       "info": "Removes the outer margin so the image bleeds to the edge of the screen (both edges on mobile). Only affects this section's image."
+    },
+    {
+      "type": "range",
+      "id": "content_image_gap",
+      "label": "Gap between text and image (desktop)",
+      "min": 24,
+      "max": 160,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
     },
     {
       "type": "checkbox",

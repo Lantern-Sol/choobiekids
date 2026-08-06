@@ -1,0 +1,164 @@
+{%- liquid
+  assign product_resource = closest.product
+  assign v = product_resource.selected_or_first_available_variant
+
+  # Badge state for the SELECTED variant (single variant -> discount is always uniform).
+  assign badge_is_soldout = false
+  assign badge_is_preorder = false
+  assign badge_disc = 0
+  if v != blank
+    if v.available == false
+      assign badge_is_soldout = true
+    elsif v.inventory_management != blank and v.inventory_quantity <= 0 and v.inventory_policy == 'continue'
+      assign badge_is_preorder = true
+    endif
+    unless badge_is_soldout
+      if v.compare_at_price > v.price and v.compare_at_price > 0
+        assign badge_disc = v.compare_at_price | minus: v.price | times: 100.0 | divided_by: v.compare_at_price | round
+      endif
+    endunless
+  endif
+
+  assign badge_justify = 'flex-start'
+  case block.settings.alignment
+    when 'center'
+      assign badge_justify = 'center'
+    when 'right'
+      assign badge_justify = 'flex-end'
+  endcase
+
+  # Does ANY variant show a badge? If so, reserve the badge's vertical space on
+  # every variant (via an invisible placeholder) so switching to a no-badge
+  # variant doesn't shift the title/price up and down.
+  assign product_has_badge = false
+  for pv in product_resource.variants
+    if pv.available == false or pv.compare_at_price > pv.price and pv.compare_at_price > 0
+      assign product_has_badge = true
+      break
+    endif
+    if pv.inventory_management != blank and pv.inventory_quantity <= 0 and pv.inventory_policy == 'continue'
+      assign product_has_badge = true
+      break
+    endif
+  endfor
+-%}
+
+<product-badge
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product_resource.id }}"
+  style="{% render 'spacing-style', settings: block.settings %} --badge-inline-justify: {{ badge_justify }};"
+  {{ block.shopify_attributes }}
+>
+  {%- if badge_is_preorder or badge_is_soldout or badge_disc > 0 -%}
+    <div
+      class="product-badges product-badges--inline"
+      style="
+        --badge-border-radius: {{ settings.badge_corner_radius }}px;
+        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-font-size: {{ settings.badge_font_size }}px; --badge-text-transform: {{ settings.badge_text_transform }};
+      "
+    >
+      {%- if badge_is_preorder -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-preorder">
+          {{ 'content.product_badge_preorder' | t }}
+        </div>
+      {%- endif -%}
+      {%- if badge_is_soldout -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-sold-out">
+          {{ 'content.product_badge_sold_out' | t }}
+        </div>
+      {%- elsif badge_disc > 0 -%}
+        <div class="product-badges__badge product-badges__badge--rectangle color-custom-badge-sale">
+          {{ 'content.product_badge_percent_off' | t: percent: badge_disc }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- elsif product_has_badge -%}
+    {%- comment -%} No badge for this variant, but others have one — reserve the height so nothing shifts. {%- endcomment -%}
+    <div
+      class="product-badges product-badges--inline product-badges--placeholder"
+      aria-hidden="true"
+      style="
+        --badge-border-radius: {{ settings.badge_corner_radius }}px;
+        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family); --badge-font-weight: var(--font-{{ settings.badge_font_family }}--weight); --badge-font-size: {{ settings.badge_font_size }}px; --badge-text-transform: {{ settings.badge_text_transform }};
+      "
+    >
+      <div class="product-badges__badge product-badges__badge--rectangle">&nbsp;</div>
+    </div>
+  {%- endif -%}
+</product-badge>
+
+{% render 'product-badges-styles' %}
+
+{% schema %}
+{
+  "name": "Product badge",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows Pre-order / Sold out / discount for the selected variant. Colours, font, size, corner radius are controlled globally in Theme settings > Badges."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        { "value": "left", "label": "t:options.left" },
+        { "value": "center", "label": "t:options.center" },
+        { "value": "right", "label": "t:options.right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product badge",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

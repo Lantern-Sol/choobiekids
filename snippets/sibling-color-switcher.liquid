@@ -3,10 +3,13 @@
   products (one per color) linked through the `custom.product_group` metaobject.
   Each sibling links to its own product page; the current product is shown selected.
 
+  Matches the Figma "Color variants" component (node 9178:7446): a caption-bold
+  label showing the current color name, then a row of 48x62 rounded image swatches.
+
   Color is expressed by product identity (one product per color), NOT by a variant
   option — so Size stays the only native variant inside each product and nothing is
   duplicated in the variant picker. The color name comes from the `custom.color_label`
-  metafield (falling back to the product title) and the chip is the product's featured image.
+  metafield (falling back to the product title); the chip is the product's featured image.
 
   @param {object} product - The current product object.
   @param {object} [block] - The block object, for theme editor attributes.
@@ -17,11 +20,12 @@
 
 {% liquid
   assign siblings = product.metafields.custom.product_group.value.products.value
+  assign current_label = product.metafields.custom.color_label | default: product.title
 %}
 
 {%- if siblings and siblings.count > 1 -%}
   <div class="sibling-color-switcher" {{ block.shopify_attributes }}>
-    <span class="sibling-color-switcher__legend">{{ 'products.sibling_color_switcher.label' | t }}</span>
+    <span class="sibling-color-switcher__legend">{{ current_label }}</span>
     <ul class="sibling-color-switcher__list" role="list">
       {%- for sibling in siblings -%}
         {%- liquid
@@ -64,43 +68,51 @@
   .sibling-color-switcher {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
   }
 
   .sibling-color-switcher__legend {
-    font-size: 0.875rem;
+    font-family: var(--font-body--family);
+    font-weight: 700;
+    font-size: 0.875rem; /* Brand Font Size/Caption = 14px */
+    line-height: 1.2;
+    color: var(--color-foreground); /* Text/default = #2c353f */
   }
 
   .sibling-color-switcher__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.5rem; /* 8px */
     margin: 0;
-    padding: 0;
+    padding: 0.5rem 0 0; /* 8px above the swatch row */
     list-style: none;
   }
 
   .sibling-color-switcher__swatch {
-    display: inline-flex;
-    border-radius: 50%;
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    transition: outline-color 0.1s ease;
+    display: block;
+    width: 3rem; /* 48px */
+    height: 3.875rem; /* 62px */
+    padding: 0;
+    overflow: hidden;
+    background: none;
+    border: 1px solid #c7d1cb; /* Borders/default = secondary/200 */
+    border-radius: 0.25rem; /* 4px */
+    cursor: pointer;
+    transition: border-color 0.1s ease;
   }
 
   .sibling-color-switcher__swatch:hover {
-    outline-color: rgb(var(--color-foreground-rgb) / 0.4);
+    border-color: #3b4754; /* Borders/brand = primary/500 */
   }
 
   .sibling-color-switcher__swatch.is-selected {
-    outline-color: rgb(var(--color-foreground-rgb));
+    border-color: #3b4754; /* Borders/brand = primary/500 */
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.1);
   }
 
   .sibling-color-switcher__img {
     display: block;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 {% endstylesheet %}

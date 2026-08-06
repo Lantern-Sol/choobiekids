@@ -859,7 +859,7 @@
 @media screen and (min-width: 750px) {
   .ls-editorial__grid {
     grid-template-columns: 5fr 7fr;
-    gap: 3rem;
+    gap: var(--editorial-column-gap, 3rem);
   }
 
   .ls-editorial__grid--image-left {
@@ -909,6 +909,23 @@
 
 .ls-editorial__body p {
   margin: 0;
+}
+
+.ls-editorial__body-mobile {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #2C353F;
+}
+
+.ls-editorial__body-mobile p {
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .ls-editorial__body-mobile {
+    display: none;
+  }
 }
 
 .ls-editorial__specs {

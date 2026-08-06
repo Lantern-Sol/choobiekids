@@ -57,6 +57,63 @@
 
   .media-gallery__mobile-controls {
     grid-area: auto;
+    display: flex;
+    justify-content: center;
+    margin-block-start: 1rem;
+  }
+
+  /* Line-style pagination dots for the gallery carousel (Figma). Scoped to
+     media-gallery so it can't affect the homepage slideshow dots. */
+  media-gallery .slideshow-controls__dots {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  media-gallery .slideshow-controls__dots .slideshow-control {
+    width: 2rem;
+    height: 0.1875rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.125rem;
+    background-color: #e2e3e5;
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+    cursor: pointer;
+  }
+
+  media-gallery .slideshow-controls__dots .slideshow-control[aria-selected='true'] {
+    background-color: #4a6b57;
+  }
+
+  /* Media border-radius on mobile — the base rule is gated to min-width:750. */
+  @media screen and (max-width: 749px) {
+    media-gallery.media-gallery--grid .product-media > * {
+      border-radius: var(--media-radius, 0);
+      overflow: hidden;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    media-gallery.media-gallery--grid.media-gallery--hint slideshow-slides {
+      --slideshow-gap: 12px;
+      width: calc(100% + var(--page-margin, 12px));
+    }
+
+    media-gallery.media-gallery--grid.media-gallery--hint
+      slideshow-slides > slideshow-slide.product-media-container:not(:only-child) {
+      flex: 0 0 85%;
+      width: 85%;
+      scroll-snap-align: start;
+    }
+
+    media-gallery.media-gallery--grid.media-gallery--hint
+      slideshow-slide[aria-hidden='false'] + slideshow-slide {
+      content-visibility: visible;
+    }
   }
 
   .product-media-container--zoomable.product-media-container--image {

@@ -109,6 +109,7 @@
     "mobile_column_optimization": "Columns will automatically optimize for mobile",
     "mobile_layout": "Mobile layout",
     "mobile_size": "Mobile size",
+    "mobile_padding": "Mobile padding",
     "mobile_width": "Mobile width",
     "padding": "Padding",
     "padding_desktop": "Desktop padding",
@@ -168,6 +169,7 @@
     "navigation": "Navigation"
   },
   "html_defaults": {
+    "quote_placeholder": "<p>Add a short quote, note, or disclaimer to highlight it with an accent line.</p>",
     "join_our_email_list": "<h2>Join our email list</h2>",
     "get_exclusive_deals_and_early_access_to_new_products": "<p>Get exclusive deals and early access to new products.</p>",
     "artistry_in_action": "<p>Artistry in action </p>",
@@ -259,6 +261,7 @@
   "names": {
     "column": "Column",
     "product_title": "Product title",
+    "quote": "Quote",
     "custom_liquid": "Custom Liquid",
     "404": "404",
     "accelerated_checkout": "Accelerated checkout",
@@ -783,6 +786,7 @@
     "below_media": "Below media"
   },
   "settings": {
+    "accent_side": "Accent line side",
     "accordion": "Accordion",
     "account": "Account",
     "actions_display_style": "Menu style",
@@ -1197,6 +1201,7 @@
     // Measurement unit selector (pixel vs percent)
     "unit": "Unit",
     "use_inverse_logo": "Use inverse logo",
+    "use_mobile_padding": "Use mobile padding",
     "variant_images": "Variant images",
     "variant_per_page": "Variants per page",
     "vendor": "Vendor",
