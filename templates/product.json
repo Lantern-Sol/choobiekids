@@ -1049,10 +1049,33 @@
                         "padding-inline-end-mobile": 0
                       },
                       "blocks": {}
+                    },
+                    "quote_yij7BW": {
+                      "type": "quote",
+                      "name": "t:names.quote",
+                      "settings": {
+                        "text": "<p>”An AirTag is designed to help locate belongings. Apple and AirTag are trademarks of Apple, Inc. Choobies is not endorsed, sponsored by or affiliated with Apple Inc.\"</p>",
+                        "accent_side": "left",
+                        "border_width": 2,
+                        "border_color": "#ff6b5a",
+                        "text_color": "",
+                        "font_size": "0.875rem",
+                        "padding-block-start": 12,
+                        "padding-block-end": 6,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "use_mobile_padding": false,
+                        "padding-block-start-mobile": 0,
+                        "padding-block-end-mobile": 0,
+                        "padding-inline-start-mobile": 0,
+                        "padding-inline-end-mobile": 0
+                      },
+                      "blocks": {}
                     }
                   },
                   "block_order": [
-                    "desc_text"
+                    "desc_text",
+                    "quote_yij7BW"
                   ]
                 },
                 "row_material": {
