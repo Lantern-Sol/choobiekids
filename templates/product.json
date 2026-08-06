@@ -377,7 +377,7 @@
                     "border_color": "",
                     "stripe_color": "",
                     "text_color": "",
-                    "toggle_color": "",
+                    "toggle_color": "{{ settings.color_palette.color1 }}",
                     "border_radius": 14,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
