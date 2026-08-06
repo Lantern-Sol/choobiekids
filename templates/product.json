@@ -457,7 +457,7 @@
               "name": "Free shipping",
               "settings": {
                 "content_direction": "row",
-                "vertical_on_mobile": true,
+                "vertical_on_mobile": false,
                 "horizontal_alignment": "flex-start",
                 "vertical_alignment": "center",
                 "align_baseline": false,
@@ -973,7 +973,7 @@
               "settings": {
                 "icon": "caret",
                 "dividers": true,
-                "divider_color": "#EDF0EE",
+                "divider_color": "#edf0ee",
                 "type_preset": "custom",
                 "font": "var(--font-body--family)",
                 "enable_custom_font_weight": false,
