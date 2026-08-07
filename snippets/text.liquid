@@ -232,10 +232,11 @@
     color: var(--accent-color, inherit);
   }
 
-  /* Mobile-only text alignment override */
+  /* Mobile-only text alignment + wrap override */
   @media screen and (max-width: 749px) {
     .text-block > * {
       text-align: var(--text-align-mobile, var(--text-align, var(--text-align-default)));
+      text-wrap: var(--text-wrap-mobile, var(--text-wrap));
     }
   }
 

@@ -30,6 +30,9 @@
   {%- if settings.wrap != blank -%}
     --text-wrap: {{ settings.wrap }};
   {%- endif -%}
+  {%- if settings.wrap_mobile != blank and settings.wrap_mobile != 'inherit' -%}
+    --text-wrap-mobile: {{ settings.wrap_mobile }};
+  {%- endif -%}
   {%- comment -%}
     Emit mobile-only typography vars whenever the mobile preset is custom.
     The mobile_font_size / mobile_custom_line_height settings are gated

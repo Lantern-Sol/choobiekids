@@ -2892,6 +2892,10 @@ form.payment-terms {
   .layout-panel-flex--row:not(.mobile-column) {
     flex-wrap: var(--flex-wrap-mobile);
     height: auto;
+    /* Honor the per-group mobile vertical alignment for horizontal groups that
+       stay horizontal on mobile. Defaults to the desktop value, so groups that
+       don't opt into "Use mobile alignment" are unaffected. */
+    align-items: var(--vertical-alignment-mobile, var(--vertical-alignment));
 
     >.menu {
       flex: 1 1 min-content;

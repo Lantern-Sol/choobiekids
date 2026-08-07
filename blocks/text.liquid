@@ -467,6 +467,32 @@
     },
     {
       "type": "select",
+      "id": "wrap_mobile",
+      "label": "Wrap (mobile)",
+      "info": "Overrides wrap on screens under 750px.",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "pretty",
+          "label": "t:options.pretty"
+        },
+        {
+          "value": "balance",
+          "label": "t:options.balance"
+        },
+        {
+          "value": "nowrap",
+          "label": "t:options.none"
+        }
+      ],
+      "default": "inherit",
+      "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
       "id": "type_preset_mobile",
       "label": "Preset (mobile)",
       "info": "Overrides the typography preset on screens under 750px.",
