@@ -786,6 +786,14 @@ class ProductFormComponent extends Component {
       const newAddToCartButton = html.querySelector('product-form-component [ref="addToCartButton"]');
       if (newAddToCartButton && currentAddToCartButton) {
         morph(currentAddToCartButton, newAddToCartButton);
+        // The shared morph runs childrenOnly, so the button's own class list isn't
+        // synced. Reapply the pre-order modifier explicitly for the new variant
+        // (otherwise switching e.g. an in-stock size to a pre-order size keeps the
+        // normal button colour even though the label morphs to "Pre-order").
+        currentAddToCartButton.classList.toggle(
+          'add-to-cart-button--preorder',
+          newAddToCartButton.classList.contains('add-to-cart-button--preorder')
+        );
       }
 
       if (acceleratedCheckoutButtonContainer) {

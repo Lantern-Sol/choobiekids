@@ -574,7 +574,7 @@
                 "content_direction": "row",
                 "vertical_on_mobile": false,
                 "horizontal_alignment": "center",
-                "vertical_alignment": "flex-start",
+                "vertical_alignment": "stretch",
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "center",
@@ -624,6 +624,7 @@
                   "settings": {
                     "content_direction": "column",
                     "vertical_on_mobile": true,
+                    "horizontal_on_mobile": true,
                     "horizontal_alignment": "flex-start",
                     "vertical_alignment": "center",
                     "align_baseline": false,
@@ -687,7 +688,7 @@
                       "type": "text",
                       "settings": {
                         "text": "<p>Made with care</p>",
-                        "mobile_text": "",
+                        "mobile_text": "<p>Made with<br>care</p>",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "center",
@@ -739,6 +740,7 @@
                   "settings": {
                     "content_direction": "column",
                     "vertical_on_mobile": true,
+                    "horizontal_on_mobile": true,
                     "horizontal_alignment": "flex-start",
                     "vertical_alignment": "center",
                     "align_baseline": false,
@@ -854,6 +856,7 @@
                   "settings": {
                     "content_direction": "column",
                     "vertical_on_mobile": true,
+                    "horizontal_on_mobile": true,
                     "horizontal_alignment": "flex-start",
                     "vertical_alignment": "center",
                     "align_baseline": false,

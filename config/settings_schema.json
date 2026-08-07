@@ -1503,6 +1503,26 @@
     "settings": [
       {
         "type": "header",
+        "content": "Pre-order button"
+      },
+      {
+        "type": "paragraph",
+        "content": "Colours for the Add-to-cart button when the selected variant is a pre-order (out of stock, continue selling)."
+      },
+      {
+        "type": "color",
+        "id": "preorder_button_background_color",
+        "label": "Pre-order button background",
+        "default": "#3b4754"
+      },
+      {
+        "type": "color",
+        "id": "preorder_button_text_color",
+        "label": "Pre-order button text",
+        "default": "#fffffb"
+      },
+      {
+        "type": "header",
         "content": "t:options.button_primary"
       },
       {

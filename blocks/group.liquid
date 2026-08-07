@@ -54,6 +54,13 @@
       "visible_if": "{{ block.settings.content_direction == 'row' }}"
     },
     {
+      "type": "checkbox",
+      "id": "horizontal_on_mobile",
+      "label": "Horizontal on mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.content_direction == 'column' }}"
+    },
+    {
       "type": "select",
       "id": "horizontal_alignment",
       "label": "t:settings.alignment",
@@ -94,6 +101,10 @@
         {
           "value": "flex-end",
           "label": "t:options.bottom"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch (equal height)"
         }
       ],
       "default": "center",

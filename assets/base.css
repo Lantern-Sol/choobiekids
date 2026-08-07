@@ -2610,7 +2610,7 @@ deferred-media[class] :is(.deferred-media__poster-button img, .deferred-media__p
 }
 
 .price {
-  font-weight: 700;
+  font-weight: var(--font-weight, 700);
 }
 
 product-recommendations .price,
@@ -2879,6 +2879,14 @@ form.payment-terms {
     flex-flow: column nowrap;
     align-items: var(--horizontal-alignment);
     justify-content: var(--vertical-alignment-mobile);
+  }
+
+  .layout-panel-flex--column.mobile-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: var(--horizontal-alignment-mobile, var(--horizontal-alignment));
+    align-items: var(--vertical-alignment-mobile, var(--vertical-alignment));
+    height: auto;
   }
 
   .layout-panel-flex--row:not(.mobile-column) {

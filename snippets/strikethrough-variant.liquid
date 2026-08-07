@@ -1,13 +1,14 @@
 {% doc %}
-  Renders a strikethrough line SVG for unavailable product options.
+  Renders a strikethrough line SVG for unavailable or pre-order product options.
 
   @param {object} product_option - The product option object. Renders the strikethrough when product_option.available is false.
+  @param {boolean} [is_preorder] - When true, also renders the strikethrough (pre-order values are crossed like sold-out ones).
 {% enddoc %}
 
-{% unless product_option.available %}
+{% if product_option.available == false or is_preorder %}
   <svg
     viewBox="0 0 100 46"
-    preserveAspectRatio="xMidYMid slice"
+    preserveAspectRatio="none"
     class="variant-option__strikethrough"
     aria-hidden="true"
   >
@@ -16,4 +17,4 @@
     {% # duplicate line for motion overlay %}
     <line x1="100" y1="0" x2="0" y2="46" vector-effect="non-scaling-stroke" />
   </svg>
-{% endunless %}
+{% endif %}

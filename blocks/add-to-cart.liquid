@@ -9,6 +9,9 @@
 {% liquid
   assign scoped_class = block.settings.style_class | append: '--' | append: block.id
   assign class = 'add-to-cart-button ' | append: block.settings.style_class | append: ' ' | append: scoped_class
+  if is_preorder
+    assign class = class | append: ' add-to-cart-button--preorder'
+  endif
   assign id = 'BuyButtons-ProductSubmitButton-' | append: block.id
 %}
 {% render 'button-custom-styles', block_settings: block.settings, block_id: block.id %}
@@ -23,6 +26,7 @@
     can_add_to_cart: can_add_to_cart,
     product: closest.product,
     add_to_cart_text: add_to_cart_text,
+    show_icon: false,
     data_testid: 'standalone-add-to-cart'
   %}
 </span>

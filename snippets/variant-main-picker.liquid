@@ -46,6 +46,7 @@
     data-product-title="{{ product_resource.title | escape }}"
     data-block-id="{{ block.id }}"
     data-product-url="{{ product_resource.url }}"
+    data-size-system="us"
     ref="mainVariantPicker"
     {% if product.id == product_resource.id %}
       data-template-product-match="true"
@@ -93,18 +94,55 @@
           {%- liquid
             assign default_option_index = product_option.position | minus: 1
             assign default_value_at_position = default_variant.options[default_option_index]
+
+            # Dual sizing: values written as "US / EU" (e.g. "5C / 21"). When present,
+            # show a US|EU toggle and split the display; the radio value keeps the full
+            # "US / EU" string so the cart/checkout title is unchanged.
+            assign is_dual_size = false
+            for dual_value in product_option.values
+              if dual_value.name contains ' / '
+                assign is_dual_size = true
+                break
+              endif
+            endfor
           -%}
           <fieldset
-            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
+            class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}{% if is_dual_size %} variant-option--has-system{% endif %}"
             data-fieldset-index="{{ fieldset_index }}"
             ref="fieldsets[]"
             {{ option_id_attribute }}
           >
-            <legend>
-              {{ product_option.name | escape -}}
-              {%- if variant_style == 'swatch' -%}
-                <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
-              {%- endif %}
+            <legend class="variant-option__legend{% if is_dual_size %} variant-option__legend--with-system{% endif %}">
+              <span class="variant-option__legend-name">
+                {{ product_option.name | escape -}}
+                {%- if variant_style == 'swatch' -%}
+                  <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
+                {%- endif %}
+              </span>
+              {%- if is_dual_size -%}
+                <span
+                  class="variant-size-system"
+                  role="group"
+                  aria-label="{{ 'accessibility.size_system' | t }}"
+                >
+                  <button
+                    type="button"
+                    class="variant-size-system__opt variant-size-system__opt--us"
+                    data-size-system-value="us"
+                    on:click="/selectSizeSystem"
+                  >
+                    {{- 'content.size_system_us' | t -}}
+                  </button>
+                  <button
+                    type="button"
+                    class="variant-size-system__opt variant-size-system__opt--eu"
+                    data-size-system-value="eu"
+                    on:click="/selectSizeSystem"
+                  >
+                    {{- 'content.size_system_eu' | t -}}
+                  </button>
+                </span>
+              {%- endif -%}
             </legend>
             {%- for product_option_value in product_option.values -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
@@ -115,6 +153,14 @@
                   assign is_selected_default = true
                 else
                   assign is_selected_default = false
+                endif
+
+                # Pre-order value: its variant is tracked, out of stock, continue selling.
+                # (For single-option products this resolves to exactly one variant.)
+                assign ov_preorder = false
+                assign ov_variant = product_option_value.variant
+                if ov_variant and ov_variant.inventory_management != blank and ov_variant.inventory_quantity <= 0 and ov_variant.inventory_policy == 'continue'
+                  assign ov_preorder = true
                 endif
               -%}
               <label
@@ -135,6 +181,7 @@
                   data-option-name="{{ product_option.name | escape }}"
                   data-option-value-id="{{ product_option_value.id }}"
                   data-option-available="{{ product_option_value.available }}"
+                  data-option-preorder="{{ ov_preorder }}"
                   data-connected-product-url="{{ product_option_value.product_url }}"
                   {% if product_option_value.variant.id %}
                     data-variant-id="{{ product_option_value.variant.id }}"
@@ -173,10 +220,16 @@
                     class="variant-option__button-label__text"
                     data-key="variant-option-text"
                   >
-                    {{- product_option_value | escape -}}
+                    {%- if is_dual_size -%}
+                      {%- assign size_parts = product_option_value.name | split: ' / ' -%}
+                      <span class="variant-size-part variant-size-part--us">{{ size_parts[0] | escape }}</span>
+                      <span class="variant-size-part variant-size-part--eu">{{ size_parts[1] | default: size_parts[0] | escape }}</span>
+                    {%- else -%}
+                      {{- product_option_value | escape -}}
+                    {%- endif -%}
                   </span>
                 {% endif %}
-                {% render 'strikethrough-variant', product_option: product_option_value %}
+                {% render 'strikethrough-variant', product_option: product_option_value, is_preorder: ov_preorder %}
               </label>
             {%- endfor -%}
             {% if option_id_attribute %}
@@ -275,7 +328,13 @@
       <script type="application/json" data-all-variants>
         [
           {%- for v in product_resource.variants -%}
-            {"id":{{ v.id | json }},"available":{{ v.available | json }},"options":{{ v.options | json }}}
+            {%- liquid
+              assign v_preorder = false
+              if v.inventory_management != blank and v.inventory_quantity <= 0 and v.inventory_policy == 'continue'
+                assign v_preorder = true
+              endif
+            -%}
+            {"id":{{ v.id | json }},"available":{{ v.available | json }},"preorder":{{ v_preorder | json }},"options":{{ v.options | json }}}
             {%- unless forloop.last -%},{%- endunless -%}
           {%- endfor -%}
         ]

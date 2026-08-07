@@ -31,30 +31,42 @@
         {%- liquid
           assign color_label = sibling.metafields.custom.color_label | default: sibling.title
           assign chip_image = sibling.featured_image
+
+          assign swatch_classes = 'sibling-color-switcher__swatch'
+          if sibling.id == product.id
+            assign swatch_classes = swatch_classes | append: ' is-selected'
+          endif
+
+          assign swatch_title = color_label
+          unless sibling.available
+            assign swatch_classes = swatch_classes | append: ' sibling-color-switcher__swatch--sold-out'
+            assign sold_out_text = 'products.product.sold_out' | t
+            assign swatch_title = color_label | append: ' — ' | append: sold_out_text
+          endunless
         -%}
         <li class="sibling-color-switcher__item">
           {%- if sibling.id == product.id -%}
             <span
-              class="sibling-color-switcher__swatch is-selected"
+              class="{{ swatch_classes }}"
               aria-current="true"
-              title="{{ color_label | escape }}"
+              title="{{ swatch_title | escape }}"
             >
               {%- if chip_image -%}
-                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: color_label }}
+                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: swatch_title }}
               {%- else -%}
-                <span class="visually-hidden">{{ color_label }}</span>
+                <span class="visually-hidden">{{ swatch_title }}</span>
               {%- endif -%}
             </span>
           {%- else -%}
             <a
-              class="sibling-color-switcher__swatch"
+              class="{{ swatch_classes }}"
               href="{{ sibling.url }}"
-              title="{{ color_label | escape }}"
+              title="{{ swatch_title | escape }}"
             >
               {%- if chip_image -%}
-                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: color_label }}
+                {{ chip_image | image_url: width: 96 | image_tag: loading: 'lazy', widths: '48, 96', class: 'sibling-color-switcher__img', alt: swatch_title }}
               {%- else -%}
-                <span class="visually-hidden">{{ color_label }}</span>
+                <span class="visually-hidden">{{ swatch_title }}</span>
               {%- endif -%}
             </a>
           {%- endif -%}
@@ -88,20 +100,16 @@
   }
 
   .sibling-color-switcher__swatch {
+    position: relative;
     display: block;
     width: 3rem; /* 48px */
     height: 3.875rem; /* 62px */
     padding: 0;
     overflow: hidden;
-    background: none;
+    background-color: var(--color-background); /* shows through when dimmed */
     border: 1px solid #c7d1cb; /* Borders/default = secondary/200 */
     border-radius: 0.25rem; /* 4px */
     cursor: pointer;
-    transition: border-color 0.1s ease;
-  }
-
-  .sibling-color-switcher__swatch:hover {
-    border-color: #3b4754; /* Borders/brand = primary/500 */
   }
 
   .sibling-color-switcher__swatch.is-selected {
@@ -114,5 +122,26 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Out-of-stock state (Figma "Out of stock" swatch): image dimmed + diagonal strike */
+  .sibling-color-switcher__swatch--sold-out .sibling-color-switcher__img {
+    opacity: 0.5;
+  }
+
+  .sibling-color-switcher__swatch--sold-out::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* strike uses the default border color (#C7D1CB) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 48 62'%3E%3Cline x1='0' y1='62' x2='48' y2='0' stroke='%23C7D1CB' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  /* Active + sold out: strike uses the brand border color (#3B4754) */
+  .sibling-color-switcher__swatch--sold-out.is-selected::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 48 62'%3E%3Cline x1='0' y1='62' x2='48' y2='0' stroke='%233B4754' stroke-width='1.5'/%3E%3C/svg%3E");
   }
 {% endstylesheet %}

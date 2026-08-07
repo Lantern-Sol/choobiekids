@@ -105,6 +105,26 @@
     text-transform: var(--button-text-case-secondary);
   }
 
+  /* Pre-order state: colours come from Theme settings (Buttons > Pre-order button),
+     exposed as --preorder-button-* on :root. The doubled class gives (0,2,0)
+     specificity so it beats the scoped .button-custom--{id} custom properties
+     without !important. Shared by the main buy button and the mobile sticky bar
+     (both receive .add-to-cart-button--preorder). */
+  .add-to-cart-button--preorder.add-to-cart-button--preorder {
+    --button-background-color: var(--preorder-button-background, #3b4754);
+    --button-color: var(--preorder-button-text, #fffffb);
+    --button-border-color: var(--preorder-button-background, #3b4754);
+
+    background-color: var(--preorder-button-background, #3b4754);
+    color: var(--preorder-button-text, #fffffb);
+    border-color: var(--preorder-button-background, #3b4754);
+  }
+
+  .add-to-cart-button--preorder.add-to-cart-button--preorder:hover {
+    background-color: color-mix(in srgb, var(--preorder-button-background, #3b4754), #000 12%);
+    border-color: color-mix(in srgb, var(--preorder-button-background, #3b4754), #000 12%);
+  }
+
   .product-form-text__error {
     display: flex;
     flex: 1 0 100%;

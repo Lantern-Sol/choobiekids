@@ -4,6 +4,9 @@ import { OverflowList } from '@theme/overflow-list';
 import { yieldToMainThread, getViewParameterValue, ResizeNotifier } from '@theme/utilities';
 import { ProductSelectEvent } from '@shopify/events';
 
+/** localStorage key for the shopper's US/EU size-system preference. */
+const SIZE_SYSTEM_STORAGE_KEY = 'choobie:size-system';
+
 /**
  * @typedef {object} VariantPickerRefs
  * @property {HTMLFieldSetElement[]} fieldsets - The fieldset elements.
@@ -47,12 +50,51 @@ export default class VariantPicker extends Component {
 
     this.addEventListener('change', this.variantChanged.bind(this));
     this.#resizeObserver.observe(this);
+    this.#restoreSizeSystem();
     this.recomputeAvailability();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.#resizeObserver.disconnect();
+  }
+
+  /**
+   * Restores the saved US/EU size-system preference onto the picker root, where
+   * CSS shows the matching half of each "US / EU" value. The root element
+   * survives morphs, so the choice persists across variant changes.
+   */
+  #restoreSizeSystem() {
+    try {
+      const saved = localStorage.getItem(SIZE_SYSTEM_STORAGE_KEY);
+      if (saved === 'us' || saved === 'eu') {
+        this.dataset.sizeSystem = saved;
+      }
+    } catch {
+      // localStorage blocked (private mode etc.) — keep the server default (US).
+    }
+  }
+
+  /**
+   * Switches the displayed size system (US or EU) and remembers it sitewide.
+   * Bound via `on:click="/selectSizeSystem"` on the toggle buttons.
+   * @param {MouseEvent} event
+   */
+  selectSizeSystem(event) {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const button = target.closest('[data-size-system-value]');
+    if (!(button instanceof HTMLElement)) return;
+
+    const value = button.dataset.sizeSystemValue;
+    if (value !== 'us' && value !== 'eu') return;
+
+    this.dataset.sizeSystem = value;
+    try {
+      localStorage.setItem(SIZE_SYSTEM_STORAGE_KEY, value);
+    } catch {
+      // Ignore storage failures — the in-page toggle still works this session.
+    }
   }
 
   /**
@@ -515,23 +557,33 @@ export default class VariantPicker extends Component {
       const inputs = fieldset.querySelectorAll('input');
       inputs.forEach((input) => {
         const candidateValue = input.value;
-        const isAvailable = variants.some((variant) => {
-          if (!variant.available) return false;
-          if (variant.options[fieldsetIndex] !== candidateValue) return false;
+        let isAvailable = false;
+        let hasInStock = false;
+        for (const variant of variants) {
+          if (!variant.available) continue;
+          if (variant.options[fieldsetIndex] !== candidateValue) continue;
+          let othersMatch = true;
           for (let i = 0; i < selectedByPosition.length; i++) {
             if (i === fieldsetIndex) continue;
             const sel = selectedByPosition[i];
-            if (sel != null && variant.options[i] !== sel) return false;
+            if (sel != null && variant.options[i] !== sel) {
+              othersMatch = false;
+              break;
+            }
           }
-          return true;
-        });
-        this.#applyAvailability(input, isAvailable);
+          if (!othersMatch) continue;
+          isAvailable = true;
+          if (!variant.preorder) hasInStock = true;
+        }
+        // Pre-order = purchasable, but only via out-of-stock / continue-selling variants.
+        const isPreorder = isAvailable && !hasInStock;
+        this.#applyAvailability(input, isAvailable, isPreorder);
       });
     });
   }
 
   /**
-   * @returns {Array<{id: number, available: boolean, options: string[]}> | null}
+   * @returns {Array<{id: number, available: boolean, preorder: boolean, options: string[]}> | null}
    */
   #readAllVariants() {
     const script = this.querySelector('script[type="application/json"][data-all-variants]');
@@ -546,9 +598,11 @@ export default class VariantPicker extends Component {
   /**
    * @param {HTMLInputElement} input
    * @param {boolean} isAvailable
+   * @param {boolean} [isPreorder]
    */
-  #applyAvailability(input, isAvailable) {
+  #applyAvailability(input, isAvailable, isPreorder = false) {
     input.dataset.optionAvailable = String(isAvailable);
+    input.dataset.optionPreorder = String(isPreorder);
     if (isAvailable) {
       input.removeAttribute('aria-disabled');
     } else {
@@ -558,13 +612,15 @@ export default class VariantPicker extends Component {
     const label = input.closest('label');
     if (!label) return;
 
+    // Cross out sold-out AND pre-order values — both are shown struck through.
+    const shouldStrike = !isAvailable || isPreorder;
     const existingStrikethrough = label.querySelector('.variant-option__strikethrough');
-    if (isAvailable) {
+    if (!shouldStrike) {
       existingStrikethrough?.remove();
     } else if (!existingStrikethrough) {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('viewBox', '0 0 100 46');
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      svg.setAttribute('preserveAspectRatio', 'none');
       svg.setAttribute('class', 'variant-option__strikethrough');
       svg.innerHTML =
         '<line x1="100" y1="0" x2="0" y2="46" vector-effect="non-scaling-stroke" />' +

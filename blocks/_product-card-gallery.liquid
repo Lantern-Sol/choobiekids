@@ -27,12 +27,17 @@
     if product.available == false
       assign badge_is_soldout = true
     else
+      # Card shows "Pre-order" only when EVERY variant is a pre-order (tracked,
+      # out of stock, continue selling) — e.g. a fully pre-order product.
+      assign preorder_variant_count = 0
       for badge_variant in product.variants
         if badge_variant.inventory_management != blank and badge_variant.inventory_quantity <= 0 and badge_variant.inventory_policy == 'continue'
-          assign badge_is_preorder = true
-          break
+          assign preorder_variant_count = preorder_variant_count | plus: 1
         endif
       endfor
+      if product.variants.size > 0 and preorder_variant_count == product.variants.size
+        assign badge_is_preorder = true
+      endif
     endif
 
     # Discount % across ALL purchasable variants (a non-sale variant counts as 0%),

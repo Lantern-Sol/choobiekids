@@ -75,6 +75,7 @@
       layout-panel-flex
       layout-panel-flex--{{ settings.content_direction | default: 'column' }}
       {% if settings.vertical_on_mobile %} mobile-column{% endif %}
+      {% if settings.horizontal_on_mobile %} mobile-row{% endif %}
     "
     style="{% render 'layout-panel-style', settings: settings %}"
   >

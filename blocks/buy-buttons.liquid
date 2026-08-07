@@ -17,6 +17,13 @@
   assign can_add_to_cart = false
   assign add_to_cart_text = 'products.product.unavailable' | t
 
+  # Pre-order = inventory tracked, none left, but "continue selling when out of stock".
+  # Mirrors the badge rule in blocks/product-badge.liquid so the two stay in sync.
+  assign is_preorder = false
+  if variant.inventory_management != blank and inventory_quantity <= 0 and inventory_policy == 'continue'
+    assign is_preorder = true
+  endif
+
   if variant
     if variant.quantity_rule.min > variant.inventory_quantity and inventory_managed and inventory_policy == 'deny'
       assign quantity_rule_soldout = true
@@ -24,7 +31,11 @@
 
     if variant.available
       assign can_add_to_cart = true
-      assign add_to_cart_text = 'products.product.add_to_cart' | t
+      if is_preorder
+        assign add_to_cart_text = 'actions.preorder' | t
+      else
+        assign add_to_cart_text = 'products.product.add_to_cart' | t
+      endif
     elsif inventory_managed and inventory_quantity <= 0 and inventory_policy == 'deny' or quantity_rule_soldout
       assign can_add_to_cart = false
       assign add_to_cart_text = 'products.product.sold_out' | t
@@ -224,7 +235,8 @@
             type: 'add-to-cart',
             id: 'add-to-cart',
             can_add_to_cart: can_add_to_cart,
-            add_to_cart_text: add_to_cart_text
+            add_to_cart_text: add_to_cart_text,
+            is_preorder: is_preorder
           %}
 
           {% content_for 'block',
