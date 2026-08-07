@@ -695,7 +695,7 @@
                       "settings": {
                         "text": "<p>Made with care</p>",
                         "mobile_text": "<p>Made<br/>with care</p>",
-                        "width": "100%",
+                        "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "center",
                         "alignment_mobile": "left",
@@ -811,7 +811,7 @@
                       "settings": {
                         "text": "<p>Great value</p>",
                         "mobile_text": "",
-                        "width": "100%",
+                        "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "center",
                         "alignment_mobile": "left",
@@ -927,7 +927,7 @@
                       "settings": {
                         "text": "<p>Quality materials</p>",
                         "mobile_text": "",
-                        "width": "100%",
+                        "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "center",
                         "alignment_mobile": "left",
