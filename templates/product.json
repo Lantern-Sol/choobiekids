@@ -2601,7 +2601,7 @@
             "button_position": "bottom-center",
             "custom_width": 100,
             "custom_width_mobile": 100,
-            "aspect_ratio": "18/7",
+            "aspect_ratio": "4/1",
             "aspect_ratio_mobile": "13/12",
             "border": "none",
             "border_width": 1,
