@@ -1441,7 +1441,7 @@
             "heading": {
               "type": "text",
               "settings": {
-                "text": "<h2>What&#39;s my kid&#39;s shoe size?</h2>",
+                "text": "<h2>What's my kid's shoe size?</h2>",
                 "mobile_text": "",
                 "width": "100%",
                 "max_width": "normal",
@@ -1452,9 +1452,9 @@
                 "mobile_height": "",
                 "type_preset": "h3",
                 "font": "var(--font-body--family)",
-                "accent_text": "",
-                "accent_style": "typography",
-                "accent_color": "",
+                "accent_text": "shoe size?",
+                "accent_style": "color",
+                "accent_color": "{{ settings.color_palette.color1 }}",
                 "accent_font_size": "1.375rem",
                 "enable_custom_font_weight": false,
                 "weight": "400",
