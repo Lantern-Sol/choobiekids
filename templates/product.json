@@ -674,6 +674,7 @@
                       "type": "icon",
                       "settings": {
                         "icon": "heart",
+                        "image_upload": "shopify://shop_images/griddy-icons_heart.svg",
                         "width": 24,
                         "width-mobile": 24,
                         "link": "",
@@ -788,6 +789,7 @@
                       "type": "icon",
                       "settings": {
                         "icon": "price_tag",
+                        "image_upload": "shopify://shop_images/proicons_tag.svg",
                         "width": 24,
                         "width-mobile": 24,
                         "link": "",
@@ -902,6 +904,7 @@
                       "type": "icon",
                       "settings": {
                         "icon": "star",
+                        "image_upload": "shopify://shop_images/iconoir_spark.svg",
                         "width": 24,
                         "width-mobile": 24,
                         "link": "",
